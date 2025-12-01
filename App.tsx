@@ -1,3 +1,4 @@
+
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
@@ -5,7 +6,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence, useSpring } from 'framer-motion';
-import { Menu, X, Brain, Ear, Sparkles, MessageCircle, Activity, Dna, ScanLine, Atom, ArrowRight } from 'lucide-react';
+import { Menu, X, Brain, Ear, Sparkles, MessageCircle, Activity, Dna, ScanLine, Atom, ArrowRight, Quote, Instagram, Linkedin } from 'lucide-react';
 import FluidBackground from './components/FluidBackground';
 import AIChat from './components/AIChat';
 import CustomCursor from './components/CustomCursor';
@@ -34,6 +35,31 @@ const METHODOLOGY: MethodologyStep[] = [
     iconName: 'Sparkles',
     description: 'Reescribimos la percepción del evento traumático. Al cambiar tu mirada interior, tu biología y tu entorno responden con coherencia.'
   },
+];
+
+// Testimonials Data
+const TESTIMONIALS = [
+  {
+    id: 1,
+    name: "Mariana Velázquez",
+    role: "CEO & Fundadora",
+    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200&h=200",
+    quote: "Llegué buscando alivio para una gastritis crónica y encontré la raíz de mi estrés laboral. La claridad que te da Pepe es quirúrgica."
+  },
+  {
+    id: 2,
+    name: "Roberto Almazán",
+    role: "Arquitecto",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200&h=200",
+    quote: "Escéptico al principio, pero los resultados hablan. Entender la lógica biológica de mi cuerpo me devolvió la tranquilidad."
+  },
+  {
+    id: 3,
+    name: "Sofia K.",
+    role: "Artista Visual",
+    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=200&h=200",
+    quote: "Más que una terapia, es un despertar. Dejé de ser víctima de mis síntomas para convertirme en maestra de mi biología."
+  }
 ];
 
 const App: React.FC = () => {
@@ -67,13 +93,21 @@ const App: React.FC = () => {
 
   const scrollToSection = (id: string) => {
     setMobileMenuOpen(false);
-    const element = document.getElementById(id);
-    if (element) {
-      window.scrollTo({
-        top: element.offsetTop - 100, 
-        behavior: 'smooth'
-      });
-    }
+    
+    // Small timeout to ensure menu close animation starts/layout stabilizes
+    setTimeout(() => {
+      const element = document.getElementById(id);
+      if (element) {
+        // Use getBoundingClientRect for absolute precision relative to current view
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.scrollY - 100;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
+    }, 10);
   };
 
   const handleDecode = () => {
@@ -596,6 +630,57 @@ const App: React.FC = () => {
         </div>
       </motion.section>
 
+      {/* TESTIMONIALS SECTION */}
+      <motion.section 
+        id={Section.TESTIMONIOS}
+        className="py-32 bg-white relative overflow-hidden"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8 }}
+      >
+        <div className="absolute inset-0 bg-slate-50/50 -skew-y-2 transform origin-top-left scale-110 z-0"></div>
+        <div className="max-w-[1400px] mx-auto px-6 relative z-10">
+          <div className="text-center mb-24">
+            <span className="text-emerald-600 font-mono text-xs uppercase tracking-[0.3em] font-bold">Historias Reales</span>
+            <h2 className="text-5xl md:text-7xl font-heading font-black mt-4 text-slate-900 tracking-tighter">
+              Transformación <span className="font-serif-display italic text-emerald-600 font-normal">Vivida</span>
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
+            {TESTIMONIALS.map((t, i) => (
+              <motion.div 
+                key={t.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15, duration: 0.6 }}
+                className="bg-white p-10 rounded-3xl border border-slate-100 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_50px_-10px_rgba(16,185,129,0.1)] transition-all duration-300 group flex flex-col"
+              >
+                <div className="mb-8 text-emerald-500 opacity-20 group-hover:opacity-100 transition-opacity duration-300">
+                  <Quote size={40} className="fill-current" />
+                </div>
+                
+                <p className="text-slate-600 text-lg font-light leading-relaxed italic mb-8 flex-grow">
+                  "{t.quote}"
+                </p>
+                
+                <div className="flex items-center gap-4 pt-6 border-t border-slate-50">
+                  <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-emerald-500/20 group-hover:border-emerald-500 transition-colors">
+                    <img src={t.image} alt={t.name} className="w-full h-full object-cover" />
+                  </div>
+                  <div>
+                    <h4 className="font-heading font-bold text-slate-900 text-lg leading-none">{t.name}</h4>
+                    <span className="text-emerald-600 text-xs font-bold uppercase tracking-widest">{t.role}</span>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </motion.section>
+
       {/* FOOTER SECTION */}
       <motion.footer 
         id={Section.CONTACTO} 
@@ -618,9 +703,19 @@ const App: React.FC = () => {
               <h3 className="font-heading text-6xl md:text-7xl font-black tracking-tighter text-white mt-2 ultra-gradient-text">Pérez Franco</h3>
             </div>
             
-            <p className="text-slate-400 max-w-md mb-16 text-xl font-light leading-relaxed">
+            <p className="text-slate-400 max-w-md mb-12 text-xl font-light leading-relaxed">
               Tu biología responde a tu conciencia. Si cambias tu percepción, cambias tu realidad. Agenda tu sesión y comienza el cambio.
             </p>
+
+            {/* Social Icons */}
+            <div className="flex gap-4">
+               <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group hover:bg-emerald-600 hover:border-emerald-500 transition-all duration-300">
+                 <Instagram className="w-6 h-6 text-slate-400 group-hover:text-white transition-colors" />
+               </a>
+               <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group hover:bg-[#0077b5] hover:border-[#0077b5] transition-all duration-300">
+                 <Linkedin className="w-6 h-6 text-slate-400 group-hover:text-white transition-colors" />
+               </a>
+            </div>
           </div>
 
           <div className="bg-white/5 backdrop-blur-md p-12 rounded-[2.5rem] border border-white/10 hover:border-emerald-500/30 transition-colors shadow-2xl">

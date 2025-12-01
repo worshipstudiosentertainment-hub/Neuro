@@ -1,3 +1,4 @@
+
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
@@ -30,5 +31,6 @@ export enum Section {
   SOBRE_MI = 'sobre-mi',
   METODOLOGIA = 'metodologia',
   DECODIFICADOR = 'decodificador',
+  TESTIMONIOS = 'testimonios',
   CONTACTO = 'contacto',
 }
