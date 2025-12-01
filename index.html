@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>José Alberto Pérez Franco | Bioneuroemoción®</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Space+Grotesk:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+      html {
+        scroll-behavior: smooth;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      
+      ::-webkit-scrollbar {
+        display: none;
+      }
+
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f8fafc;
+        color: #020617;
+        overflow-x: hidden;
+      }
+      
+      h1, h2, h3, h4, .font-heading {
+        font-family: 'Space Grotesk', sans-serif;
+      }
+
+      .font-serif-display {
+        font-family: 'Playfair Display', serif;
+      }
+      
+      /* --- ULTRA TYPOGRAPHY EFFECTS --- */
+      .text-outline {
+        -webkit-text-stroke: 1px rgba(15, 23, 42, 0.2);
+        color: transparent;
+      }
+
+      .text-stroke-heavy {
+        -webkit-text-stroke: 2px #0f172a;
+        color: transparent;
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      
+      .text-stroke-heavy:hover {
+        -webkit-text-stroke: 2px #059669;
+        color: #0f172a;
+        text-shadow: 0 0 30px rgba(5, 150, 105, 0.4);
+      }
+
+      .text-stroke-light {
+        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+        color: transparent;
+      }
+
+      .text-stroke-emerald {
+        -webkit-text-stroke: 1px rgba(16, 185, 129, 0.5);
+        color: transparent;
+      }
+      
+      /* --- GLOW & LIGHTING --- */
+      .glow-emerald {
+         box-shadow: 0 0 40px -10px rgba(16, 185, 129, 0.6);
+      }
+      
+      .glow-text {
+        text-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+      }
+
+      .ultra-glass {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .ultra-gradient-text {
+        background: linear-gradient(135deg, #020617 0%, #059669 50%, #020617 100%);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: shine 8s linear infinite;
+      }
+
+      @keyframes shine {
+        to {
+          background-position: 200% center;
+        }
+      }
+
+      /* CUSTOM CURSOR LOGIC */
+      @media (min-width: 768px) {
+        body, a, button, input, label, select, textarea {
+          cursor: none !important;
+        }
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.553.0",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.29.0",
+    "framer-motion": "https://aistudiocdn.com/framer-motion@^12.23.24"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
