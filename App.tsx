@@ -1,4 +1,3 @@
-
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
@@ -6,7 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence, useSpring } from 'framer-motion';
-import { Menu, X, Brain, Ear, Sparkles, MessageCircle, Activity, Dna, ScanLine, Atom, ArrowRight, Quote, Instagram, Linkedin } from 'lucide-react';
+import { Menu, X, Brain, Ear, Sparkles, MessageCircle, Activity, Dna, ScanLine, Atom, ArrowRight, Quote, Instagram, Linkedin, ArrowUp } from 'lucide-react';
 import FluidBackground from './components/FluidBackground';
 import AIChat from './components/AIChat';
 import CustomCursor from './components/CustomCursor';
@@ -66,6 +65,7 @@ const App: React.FC = () => {
   const { scrollYProgress } = useScroll();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
   
   // Scroll Progress Bar Logic
   const scaleX = useSpring(scrollYProgress, {
@@ -86,6 +86,7 @@ const App: React.FC = () => {
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
+      setShowScrollTop(window.scrollY > 300);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -201,6 +202,21 @@ const App: React.FC = () => {
         <MessageCircle className="w-7 h-7 fill-current relative z-10" />
       </a>
 
+      {/* SCROLL TO TOP BUTTON */}
+      <AnimatePresence>
+        {showScrollTop && (
+          <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="fixed bottom-8 left-8 z-50 bg-white/10 backdrop-blur-md border border-emerald-500/30 text-emerald-600 p-4 rounded-full glow-emerald hover:bg-emerald-500 hover:text-white transition-all duration-300 shadow-[0_0_20px_rgba(16,185,129,0.2)] group"
+          >
+            <ArrowUp className="w-6 h-6 group-hover:animate-bounce" />
+          </motion.button>
+        )}
+      </AnimatePresence>
+
       {/* DYNAMIC SCROLL HEADER */}
       <nav 
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${
@@ -240,7 +256,7 @@ const App: React.FC = () => {
           </div>
           
           {/* Desktop Menu */}
-          <div className="hidden md:flex gap-12 text-sm font-bold tracking-wide text-slate-600 uppercase">
+          <div className="hidden md:flex gap-12 text-sm font-bold tracking-wide text-slate-900 uppercase">
             {[
               { label: 'Sobre Mí', id: Section.SOBRE_MI },
               { label: 'Metodología', id: Section.METODOLOGIA },
@@ -296,7 +312,7 @@ const App: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
                 onClick={() => scrollToSection(item.id)}
-                className="text-5xl font-heading font-bold text-slate-800 hover:text-emerald-600 transition-colors tracking-tighter"
+                className="text-5xl font-heading font-bold text-slate-900 hover:text-emerald-600 transition-colors tracking-tighter"
               >
                 {item.label}
               </motion.button>
@@ -342,7 +358,7 @@ const App: React.FC = () => {
               </span>
             </h1>
             
-            <p className="text-xl text-slate-600 max-w-lg leading-relaxed mb-14 font-light pl-6 border-l-4 border-emerald-500/30">
+            <p className="text-xl text-slate-700 max-w-lg leading-relaxed mb-14 font-normal pl-6 border-l-4 border-emerald-500/30">
               Acompañamiento profesional de vanguardia para descifrar el mensaje biológico de tus síntomas y recuperar tu paz emocional.
             </p>
 
@@ -377,7 +393,7 @@ const App: React.FC = () => {
             <div className="relative h-full w-[90%] rounded-[0_120px_0_120px] overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.15)] z-10 bg-slate-200">
               <div className="absolute inset-0 bg-gradient-to-b from-transparent to-slate-900/30 mix-blend-multiply z-10 pointer-events-none"></div>
               <img 
-                src="https://i.ibb.co/3ymrcJsT/Subject-disruptive-ultra-202511291228.jpg" 
+                src="https://i.ibb.co/8yTTcFQ/Whats-App-Image-2025-12-01-at-16-26-55.jpg" 
                 alt="José Alberto Pérez Franco" 
                 className="h-full w-full object-cover object-top hover:scale-105 transition-transform duration-[1.5s]" 
               />
@@ -413,7 +429,7 @@ const App: React.FC = () => {
             
             <div className="relative aspect-[3/4] bg-slate-100 overflow-hidden shadow-2xl z-10">
                <img 
-                src="https://i.ibb.co/yBPjjHsY/Create-a-new-202511301931.jpg" 
+                src="https://i.ibb.co/vxjh2yXt/Whats-App-Image-2025-12-01-at-16-26-56.jpg" 
                 alt="Consulta" 
                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" 
               />
@@ -427,7 +443,7 @@ const App: React.FC = () => {
               <span className="font-serif-display italic text-emerald-700 font-normal text-5xl md:text-7xl">Bioneuroemoción®</span>
             </h2>
             
-            <div className="space-y-8 text-lg text-slate-600 font-light leading-relaxed">
+            <div className="space-y-8 text-lg text-slate-700 font-normal leading-relaxed">
               <p>
                 <span className="text-7xl float-left mr-4 mt-[-15px] font-heading font-black text-emerald-800 opacity-20">M</span>
                 i nombre es <strong className="text-slate-900 font-bold">José Alberto Pérez Franco</strong>. Mi labor no es curarte, sino acompañarte a que tomes conciencia de "para qué" tu cuerpo ha generado un síntoma.
@@ -442,7 +458,7 @@ const App: React.FC = () => {
                     <Dna className="w-8 h-8 text-emerald-500 animate-pulse" />
                     <div className="h-px bg-gradient-to-r from-transparent via-slate-300 to-transparent flex-1"></div>
                  </div>
-                 <p className="text-center font-serif-display italic text-3xl text-slate-800 mt-8">
+                 <p className="text-center font-serif-display italic text-3xl text-slate-900 mt-8">
                   "La enfermedad es el esfuerzo que hace la naturaleza para sanar al hombre."
                  </p>
                  <p className="text-center text-xs font-black tracking-[0.2em] uppercase text-emerald-600 mt-4">— Carl G. Jung</p>
@@ -592,7 +608,7 @@ const App: React.FC = () => {
               Metodo<span className="text-stroke-heavy text-slate-900 hover:text-emerald-900 transition-colors">logía</span>
             </h2>
           </div>
-          <p className="max-w-md text-slate-500 text-right mt-8 md:mt-0 font-light text-lg">
+          <p className="max-w-md text-slate-600 text-right mt-8 md:mt-0 font-normal text-lg">
             Un camino estructurado hacia tu libertad emocional, basado en la precisión biológica y la compasión humana.
           </p>
         </div>
@@ -622,7 +638,7 @@ const App: React.FC = () => {
               <h3 className="text-3xl font-heading font-bold mb-3 text-slate-900">{step.title}</h3>
               <p className="text-emerald-600 font-serif-display italic text-xl mb-8">{step.subtitle}</p>
               
-              <p className="text-slate-600 leading-relaxed font-light text-lg">
+              <p className="text-slate-700 leading-relaxed font-normal text-lg">
                 {step.description}
               </p>
             </motion.div>
@@ -662,7 +678,7 @@ const App: React.FC = () => {
                   <Quote size={40} className="fill-current" />
                 </div>
                 
-                <p className="text-slate-600 text-lg font-light leading-relaxed italic mb-8 flex-grow">
+                <p className="text-slate-700 text-lg font-normal leading-relaxed italic mb-8 flex-grow">
                   "{t.quote}"
                 </p>
                 
@@ -735,16 +751,29 @@ const App: React.FC = () => {
               </p>
             </div>
             
-            <button 
+            <motion.button 
               onClick={() => window.open('https://wa.me/523331155895', '_blank')}
               className="mt-12 w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black py-6 rounded-2xl transition-all shadow-[0_10px_30px_-5px_rgba(16,185,129,0.3)] uppercase tracking-widest text-sm hover:-translate-y-1 hover:shadow-[0_20px_40px_-5px_rgba(16,185,129,0.5)]"
+              whileInView={{ 
+                scale: [1, 1.02, 1],
+                boxShadow: [
+                  "0 10px 30px -5px rgba(16,185,129,0.3)",
+                  "0 0 50px rgba(16,185,129,0.6)",
+                  "0 10px 30px -5px rgba(16,185,129,0.3)"
+                ]
+              }}
+              transition={{
+                duration: 2.5,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
             >
               Contactar por WhatsApp
-            </button>
+            </motion.button>
           </div>
         </div>
         
-        <div className="max-w-7xl mx-auto px-6 mt-24 pt-8 border-t border-slate-900 flex flex-col md:flex-row justify-between text-xs text-slate-600 uppercase tracking-widest font-bold">
+        <div className="max-w-7xl mx-auto px-6 mt-24 pt-8 border-t border-slate-900 flex flex-col md:flex-row justify-between text-xs text-slate-500 uppercase tracking-widest font-bold">
           <p>© 2025 José Alberto Pérez Franco.</p>
           <p>Bioneuroemoción® is a registered trademark.</p>
         </div>
