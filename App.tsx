@@ -581,12 +581,24 @@ const App: React.FC = () => {
         <div className="max-w-[1200px] mx-auto px-6 grid md:grid-cols-12 gap-20 items-center">
           <div className="md:col-span-5 relative group">
              <div className="absolute -inset-4 border border-emerald-100 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-             <div className="relative aspect-[3/4] bg-slate-100 overflow-hidden shadow-2xl">
+             <div className="relative aspect-[3/4] bg-slate-100 overflow-hidden shadow-2xl rounded-sm">
                <img 
                 src="https://i.ibb.co/vxjh2yXt/Whats-App-Image-2025-12-01-at-16-26-56.jpg" 
                 alt="Consulta" 
                 className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000" 
               />
+              {/* Quote Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent flex items-end p-8">
+                <div>
+                   <p className="font-serif-display italic text-2xl md:text-2xl text-white leading-snug mb-4 drop-shadow-lg">
+                    "Todo lo que nos irrita de los demás nos puede llevar a un entendimiento de nosotros mismos."
+                   </p>
+                   <div className="flex items-center gap-3">
+                      <div className="w-8 h-[1px] bg-emerald-500"></div>
+                      <p className="text-[10px] font-black tracking-[0.2em] uppercase text-emerald-400">— Carl G. Jung</p>
+                   </div>
+                </div>
+              </div>
             </div>
           </div>
           
@@ -603,13 +615,6 @@ const App: React.FC = () => {
               <p>
                 Facilito un proceso de autoindagación que te permite cambiar la percepción de lo que vives, pasando del estrés a la coherencia emocional.
               </p>
-              
-              <div className="pt-10 pl-6 border-l-4 border-emerald-500">
-                 <p className="font-serif-display italic text-2xl md:text-3xl text-slate-900 leading-snug">
-                  "Todo lo que nos irrita de los demás nos puede llevar a un entendimiento de nosotros mismos."
-                 </p>
-                 <p className="text-[10px] font-black tracking-[0.2em] uppercase text-emerald-600 mt-4">— Carl G. Jung</p>
-              </div>
             </div>
           </div>
         </div>
