@@ -4,7 +4,7 @@
 */
 
 import React, { useState, useEffect } from 'react';
-import { motion, useScroll, useTransform, AnimatePresence, useSpring } from 'framer-motion';
+import { motion, useScroll, useTransform, AnimatePresence, useSpring, useMotionValue } from 'framer-motion';
 import { Menu, X, Brain, Ear, Sparkles, MessageCircle, Activity, Dna, ScanLine, Atom, ArrowRight, Quote, Instagram, Linkedin, ArrowUp, Fingerprint } from 'lucide-react';
 import FluidBackground from './components/FluidBackground';
 import AIChat from './components/AIChat';
@@ -16,23 +16,23 @@ const METHODOLOGY: MethodologyStep[] = [
   { 
     id: '1', 
     title: 'Escucha Consciente', 
-    subtitle: 'El Origen',
+    subtitle: 'El Espacio Seguro',
     iconName: 'Ear',
-    description: 'Un espacio seguro donde las palabras revelan lo que el cuerpo calla. Identificamos los patrones inconscientes que rigen tu realidad actual.'
+    description: 'Un entorno libre de juicios donde puedes expresar lo que sientes. Identificamos los patrones de pensamiento y creencias que limitan tu bienestar.'
   },
   { 
     id: '2', 
     title: 'Comprensión Profunda', 
-    subtitle: 'El Sentido Biológico',
+    subtitle: 'Resonancia Emocional',
     iconName: 'Brain',
-    description: 'Desciframos la lógica biológica detrás de tu síntoma o conflicto. Entender el "para qué" es el primer paso para desactivar el programa.'
+    description: 'Descubrimos para qué estás viviendo esta situación. Todo conflicto externo es un reflejo de un estado interno que pide ser atendido.'
   },
   { 
     id: '3', 
     title: 'Transformación', 
-    subtitle: 'La Nueva Mirada',
+    subtitle: 'Coherencia Interior',
     iconName: 'Sparkles',
-    description: 'Reescribimos la percepción del evento traumático. Al cambiar tu mirada interior, tu biología y tu entorno responden con coherencia.'
+    description: 'Al cambiar tu percepción del evento, cambia tu experiencia de vida. Pasas de la reacción automática a la respuesta consciente y la paz.'
   },
 ];
 
@@ -43,21 +43,21 @@ const TESTIMONIALS = [
     name: "J.P. Rojo",
     role: "Empresario",
     image: "https://i.ibb.co/7JBhKpFx/Whats-App-Image-2025-11-19-at-15-29-30.jpg",
-    quote: "Pepe me mostró el ángulo preciso para ver lo que me dolía desde otra perspectiva. Transformé ese conflicto en nuevas herramientas y visiones para mejorar mi vida. Poco a poco, expando esta nueva mirada."
+    quote: "Pepe me mostró el ángulo preciso para ver lo que me inquietaba desde otra perspectiva. Transformé ese conflicto en nuevas herramientas y visiones para mejorar mi vida. Poco a poco, expando esta nueva visión."
   },
   {
     id: 2,
     name: "Roberto Almazán",
     role: "Arquitecto",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200&h=200",
-    quote: "Escéptico al principio, pero los resultados hablan. Entender la lógica biológica de mi cuerpo me devolvió la tranquilidad."
+    quote: "Escéptico al principio, pero la claridad mental que obtuve fue inmediata. Entender mis proyecciones me devolvió la tranquilidad en mi entorno laboral."
   },
   {
     id: 3,
     name: "Sofia K.",
     role: "Artista Visual",
     image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=200&h=200",
-    quote: "Más que una terapia, es un despertar. Dejé de ser víctima de mis síntomas para convertirme en maestra de mi biología."
+    quote: "Más que una consulta, es un despertar. Dejé de sentirme víctima de las circunstancias para convertirme en responsable de mi experiencia emocional."
   }
 ];
 
@@ -66,6 +66,10 @@ const App: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  
+  // Mobile Menu Parallax
+  const menuMouseX = useMotionValue(0);
+  const menuMouseY = useMotionValue(0);
   
   // Scroll Progress Bar Logic
   const scaleX = useSpring(scrollYProgress, {
@@ -97,6 +101,16 @@ const App: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const handleMenuMouseMove = (e: React.MouseEvent) => {
+    const { clientX, clientY } = e;
+    const { innerWidth, innerHeight } = window;
+    // Normalized coordinates -1 to 1
+    const x = (clientX / innerWidth - 0.5) * 2;
+    const y = (clientY / innerHeight - 0.5) * 2;
+    menuMouseX.set(x);
+    menuMouseY.set(y);
+  };
+
   const scrollToSection = (id: string) => {
     setMobileMenuOpen(false);
     
@@ -120,93 +134,53 @@ const App: React.FC = () => {
     if (!symptom.trim()) return;
     setIsDecoding(true);
     
-    const lowerSymptom = symptom.toLowerCase();
+    const lowerInput = symptom.toLowerCase();
     
-    // Default Neuromarketing Response
-    let title = "Estrés de Supervivencia";
-    let core = "Tu sistema está gestionando una carga emocional que la mente racional no ha podido resolver. El síntoma no es el problema, es la solución que encontró tu cuerpo para sobrevivir a un entorno hostil.";
-    let hook = "Esta adaptación consume tu energía vital. ¿Cuánto tiempo más vas a permitir que este programa dirija tu vida?";
-    let waConflict = "Estrés Inconsciente";
+    // Default Neuromarketing Response (Emotional Accompaniment)
+    let title = "Incoherencia Emocional";
+    let core = "Lo que vives afuera es un reflejo de tu estado interior. Estás experimentando una desconexión entre lo que sientes, lo que piensas y lo que haces. Esta disonancia es lo que te quita la paz.";
+    let hook = "Tu paz comienza cuando dejas de luchar contra la realidad. Vamos a encontrar el origen de esta incoherencia.";
+    let waConflict = "Gestión Emocional";
 
-    // Advanced Regex Matching with Neuro-Copywriting
-    if (lowerSymptom.match(/cabeza|migraña|cefalea|cerebro|mente/)) {
-      title = "Desvalorización Intelectual";
-      core = "Más allá del dolor físico, tu cuerpo manifiesta un conflicto de 'Desvalorización Intelectual'. Es posible que estés viviendo una situación donde sientes que tus ideas no son válidas o te juzgas severamente por no encontrar una solución racional a un problema. La migraña es el intento biológico de 'bajar el interruptor' ante un exceso de pensamiento analítico.";
-      hook = "Tu mente necesita descansar del juicio constante. En consulta, iremos al origen de esta autoexigencia para que no necesites enfermar para detenerte.";
-      waConflict = "Desvalorización Intelectual (Migrañas)";
-    } else if (lowerSymptom.match(/est[oó]mago|panza|digest|indigest|acidez|gastritis|reflujo|v[oó]mito/)) {
-      title = "El Bocado Indigesto";
-      core = "El 'Bocado Indigesto' habla de una situación o persona que has tenido que aceptar en contra de tu voluntad. Biológicamente, tu estómago genera más ácido para descomponer algo que te resulta 'tóxico' o injusto, pero que sientes que no puedes rechazar. Es la rabia contenida por lo que te obligaron a tragar.";
-      hook = "Seguir digiriendo lo inaceptable está quemando tu bienestar. Agendemos una sesión para identificar ese 'bocado' y aprender a soltarlo desde la conciencia, no desde el síntoma.";
-      waConflict = "Conflicto de Bocado Indigesto (Estómago)";
-    } else if (lowerSymptom.match(/h[ií]gado|bilis|colesterol|grasa|hepat/)) {
-      title = "Miedo a la Carencia";
-      core = "El hígado acumula reservas porque tu inconsciente percibe un miedo profundo a la carencia. No se trata solo de dinero o alimento, sino de sentir que te falta algo esencial para sobrevivir (amor, fe, reconocimiento). Tu cuerpo está en modo de ahorro energético ante un 'desierto' emocional.";
-      hook = "Vivir en modo 'supervivencia' te impide conectar con la abundancia real. Permíteme acompañarte a transformar esa percepción de escasez en confianza vital.";
-      waConflict = "Miedo a la Carencia (Hígado)";
-    } else if (lowerSymptom.match(/garganta|tos|laringe|faringe|tiroides|voz|ahogo|anginas/)) {
-      title = "La Presa que no Atrapas";
-      core = "Tu garganta cierra el paso a palabras que quedaron atrapadas. Puede ser el conflicto de 'la presa que no atrapo' (lo que quiero decir y no digo) o 'la presa que no puedo escupir' (lo que tuve que callar para evitar un conflicto mayor). El cuerpo inflama la zona para procesar ese silencio.";
-      hook = "Lo que la boca calla, el cuerpo lo grita. En nuestra sesión, daremos voz a esa emoción reprimida para que tu garganta recupere su función de expresar, no de contener.";
-      waConflict = "Palabras No Dichas (Garganta)";
-    } else if (lowerSymptom.match(/pulm[oó]n|respir|aire|asma|bronqui|neumo/)) {
-      title = "Amenaza en el Territorio";
-      core = "Los pulmones gestionan la vida misma: el aire. Este síntoma suele esconder un 'Miedo a la Muerte' o una invasión en tu territorio. Sientes que alguien te asfixia, te quita el aire o invade tu espacio vital. Es una lucha silenciosa por tu derecho a existir.";
-      hook = "Nadie debería tener que luchar por su propio aire. Vamos a trabajar juntos para delimitar tu territorio emocional y que puedas volver a respirar con plena libertad.";
-      waConflict = "Amenaza en el Territorio (Pulmones)";
-    } else if (lowerSymptom.match(/ri[ñn][oó]n|orina|cistitis|l[ií]quido|renal|calculo/)) {
-      title = "Derrumbamiento Existencial";
-      core = "Los riñones simbolizan los referentes. Un problema aquí refleja un sentimiento de 'pez fuera del agua', de haber perdido el suelo bajo tus pies o estar solo ante el peligro. El cuerpo retiene líquidos para no 'secarse' emocionalmente ante la pérdida de apoyo.";
-      hook = "El miedo a la soledad o a la pérdida desestabiliza tu base. Te invito a reestructurar tus referentes internos en una sesión para que tu cuerpo deje de retener miedo.";
-      waConflict = "Conflicto de Referentes (Riñones)";
-    } else if (lowerSymptom.match(/piel|dermis|eczem|alergia|urticaria|grano|acn[eé]|psoriasis|ronchas/)) {
-      title = "Conflicto de Separación";
-      core = "Tu piel es la frontera entre tú y el mundo. Cualquier alteración aquí habla de un dolor por un contacto deseado que se perdió, o la irritación por un contacto no deseado que se impuso. Tu piel reacciona intentando reparar esa ruptura en el vínculo.";
-      hook = "La herida emocional de la separación sigue abierta en tu dermis. Sanar esa memoria de contacto es fundamental para que tu piel recupere su integridad.";
-      waConflict = "Conflicto de Separación (Piel)";
-    } else if (lowerSymptom.match(/hueso|articul|rodilla|hombro|codo|artritis|osteoporo|reuma|cadera|columna/)) {
-      title = "Desvalorización Profunda";
-      core = "El esqueleto sostiene tu valía. Cuando duelen, hablamos de una 'Desvalorización Profunda'. Sientes que no eres lo suficientemente fuerte, capaz o válido para soportar una carga o avanzar. Es el peso de creer que 'no puedes' o 'no vales lo suficiente'.";
-      hook = "Tu estructura física se debilita cuando tu autoconcepto flaquea. Fortalezcamos tu autoestima biológica en consulta para que recuperes tu soporte ante la vida.";
-      waConflict = "Desvalorización Profunda (Huesos/Articulaciones)";
-    } else if (lowerSymptom.match(/músculo|fibro|calambre|tendi|contractura|pierna|brazo/)) {
-      title = "Impotencia en la Acción";
-      core = "La musculatura representa la potencia. Un dolor aquí indica 'Impotencia': el deseo de realizar un movimiento (luchar, huir, abrazar) que fue reprimido. La energía se quedó cargada en el tejido, esperando una orden de acción que nunca llegó.";
-      hook = "Esa tensión es energía vital estancada por una prohibición mental. Desbloqueemos esa acción reprimida para que tu cuerpo recupere su movimiento natural sin dolor.";
-      waConflict = "Impotencia en la Acción (Músculos)";
-    } else if (lowerSymptom.match(/coraz[oó]n|taquicardia|presi[oó]n|hipertensi[oó]n|sangre|cardi/)) {
-      title = "Combate por el Territorio";
-      core = "El corazón bombea la vida (sangre) al clan. Sus conflictos se relacionan con el esfuerzo desmedido por mantener unido a los tuyos o defender tu territorio. Sientes que debes luchar constantemente para asegurar el bienestar o la pertenencia de la familia.";
-      hook = "No tienes que cargar solo con el peso emocional de todo tu linaje. Permite que tu corazón descanse compartiendo esa carga en un espacio terapéutico seguro.";
-      waConflict = "Lucha por el Territorio (Corazón)";
-    } else if (lowerSymptom.match(/ojo|vis|ver|mio|astigmat|lentes|ciego/)) {
-      title = "Miedo Visual";
-      core = "Los ojos filtran la realidad. Un síntoma visual suele ser una protección biológica: 'No quiero ver lo que está pasando'. Puede ser un rechazo a ver una realidad dolorosa o el miedo a perder de vista a alguien importante. Tu biología nubla la vista para suavizar el impacto.";
-      hook = "Lo que te niegas a ver no desaparece, solo se vuelve sombra. Aclaremos tu mirada interior para que puedas enfrentar tu realidad con nuevas herramientas y sin miedo.";
-      waConflict = "Miedo Visual (Ojos)";
-    } else if (lowerSymptom.match(/o[ií]do|sorder|zumbido|tinnitus|vertigo|v[eé]rtigo|escuchar/)) {
-      title = "No Quiero Oírlo";
-      core = "El oído filtra lo que entra a tu mente. Problemas aquí indican 'No quiero escuchar esto' (críticas, juicios) o la angustia de 'No escuchar lo que necesito' (una voz amada, un reconocimiento). Es una barrera de protección ante un ambiente auditivo hostil.";
-      hook = "Aísla el ruido externo para escuchar tu verdad interna. En sesión, podemos filtrar esos mensajes tóxicos para que tu oído no necesite cerrarse al mundo.";
-      waConflict = "Conflicto Auditivo (Oídos)";
-    } else if (lowerSymptom.match(/diente|muela|boca|mand[ií]bula|enc[ií]a/)) {
-      title = "Agresividad Reprimida";
-      core = "En la naturaleza, los dientes son armas. Un conflicto dental habla de la dificultad para 'mostrar los dientes' o defenderse. Quizás sientes que debes sonreír cuando quieres morder, o que no tienes la fuerza para 'atrapar' tus deseos.";
-      hook = "La rabia no expresada se calcifica en la mandíbula. Aprendamos a gestionar esa fuerza defensiva de forma sana para que no tengas que destruirte a ti mismo para contenerla.";
-      waConflict = "Agresividad Reprimida (Dientes)";
-    } else if (lowerSymptom.match(/mujer|ovario|utero|menstru|regla|seno|mama|vagina|candid/)) {
-      title = "Identidad y Nido";
-      core = "Síntomas en órganos femeninos suelen tocar temas de 'Identidad y Nido'. Conflictos sobre cómo vives tu feminidad, tu rol de madre o pareja, o frustraciones no expresadas. A menudo cargamos memorias de dolor o sumisión del linaje femenino.";
-      hook = "Tu cuerpo está expresando un dolor ancestral o presente sobre ser mujer. Honremos y sanemos esa herida para que vivas tu feminidad desde el placer y no desde el conflicto.";
-      waConflict = "Conflicto Femenino/Nido";
-    } else if (lowerSymptom.match(/hombre|test[ií]culo|prostata|pr[óo]stata|pene|erecci[oó]n/)) {
-      title = "Potencia y Territorio";
-      core = "La biología masculina reacciona ante amenazas al 'Territorio y Potencia'. El miedo a no ser capaz de proteger a los tuyos, a perder tu estatus o a no rendir. Es una herida profunda en el sentido de valía y capacidad de protección.";
-      hook = "La verdadera potencia no viene del esfuerzo, sino de la coherencia interior. Trabajemos en recuperar tu seguridad personal para que tu biología no necesite estar en alerta defensiva.";
-      waConflict = "Conflicto Masculino/Territorio";
+    // Logic Refactored for Situations/Emotions
+    if (lowerInput.match(/ansiedad|estres|estrés|miedo|pánico|futuro|preocupaci|nervio/)) {
+      title = "Exceso de Futuro";
+      core = "La ansiedad no es más que la mente intentando controlar lo incontrolable. Indica una desconexión con el presente y una desconfianza profunda en tus propios recursos para afrontar lo que venga. Estás viviendo escenarios que aún no existen.";
+      hook = "El control es una ilusión que agota tu energía. En sesión, aprenderemos a soltar la necesidad de certeza para recuperar tu calma.";
+      waConflict = "Gestión de Ansiedad";
+    } else if (lowerInput.match(/pareja|amor|relacion|novi|espos|soledad|celos|infidelidad|separaci/)) {
+      title = "Espejo Relacional";
+      core = "Tu pareja (o la falta de ella) es tu espejo más fiel. Lo que te molesta, duele o juzgas del otro, es una parte de ti mismo que no has integrado. El conflicto no está en la relación, sino en la expectativa que has proyectado sobre ella.";
+      hook = "Deja de esperar que el otro cambie para que tú seas feliz. Recupera tu poder personal transformando tu percepción del vínculo.";
+      waConflict = "Conflicto de Pareja";
+    } else if (lowerInput.match(/trabajo|dinero|jefe|éxito|fracaso|profesi|abundancia|econom/)) {
+      title = "Valor Personal";
+      core = "Tu realidad profesional y económica es una proyección directa de tu autoconcepto. Si sientes estancamiento o injusticia afuera, es probable que internamente no te estés dando el valor o el reconocimiento que mereces. El dinero es energía de intercambio.";
+      hook = "No trabajes más duro, trabaja en tu merecimiento. Redefinamos tu relación contigo mismo para que tu entorno profesional responda.";
+      waConflict = "Bloqueo Profesional/Económico";
+    } else if (lowerInput.match(/familia|madre|padre|herman|hijo|hogar|casa/)) {
+      title = "Lealtades Invisibles";
+      core = "A menudo repetimos patrones o cargamos emociones que no nos pertenecen por amor ciego al clan familiar. El conflicto presente puede ser una lealtad a una historia no resuelta de tus padres o ancestros.";
+      hook = "Honrar a tu familia no significa repetir sus historias. Puedes amarles y, al mismo tiempo, permitirte un destino diferente y libre.";
+      waConflict = "Conflicto Familiar";
+    } else if (lowerInput.match(/tristeza|depresi|apah|duelo|llanto|pena|melancol/)) {
+      title = "El Llamado Interior";
+      core = "La tristeza no es un error, es una función necesaria. Te obliga a detenerte, a ir hacia adentro y a soltar lo que ya no sirve. Es el dolor por una percepción de pérdida o de vacío que pide ser llenado con presencia propia.";
+      hook = "No huyas de la tristeza, escúchala. Ella tiene la llave de tu próxima etapa de crecimiento si te permites transitarla acompañado.";
+      waConflict = "Proceso de Duelo/Tristeza";
+    } else if (lowerInput.match(/culpa|remordimiento|vergüenza|juicio|error/)) {
+      title = "El Juez Interno";
+      core = "La culpa es ira dirigida hacia uno mismo. Vives bajo la tiranía de un 'debería' que no estás cumpliendo. Este juicio constante te impide tomar responsabilidad y te mantiene en un ciclo de castigo inconsciente.";
+      hook = "El perdón no es un acto moral, es un acto de liberación. Cambiemos el juicio por comprensión para que puedas avanzar ligero.";
+      waConflict = "Liberación de Culpa";
+    } else if (lowerInput.match(/rabia|ira|enojo|furia|rencor|odio/)) {
+      title = "Límites No Puestos";
+      core = "La rabia es la emoción que surge para defender tu integridad. Si la sientes constantemente, es porque no has sabido poner límites claros o expresar tus necesidades a tiempo. Te has traicionado a ti mismo por complacer o evitar conflictos.";
+      hook = "La paz no es ausencia de conflicto, es fidelidad a uno mismo. Aprendamos a usar esa energía para construir límites sanos, no muros.";
+      waConflict = "Gestión de la Ira";
     }
 
-    const waMessage = encodeURIComponent(`Hola Pepe, el decodificador me mostró que mi síntoma de *${symptom.toUpperCase()}* es un *${waConflict.toUpperCase()}*. Me resonó mucho la información y siento la urgencia de desactivar este programa emocional. ¿Tienes espacio en agenda?`);
+    const waMessage = encodeURIComponent(`Hola Pepe, utilicé el Espejo Emocional y mi tema es *${symptom.toUpperCase()}*. Me resonó el concepto de *${waConflict.toUpperCase()}*. Me gustaría solicitar acompañamiento para profundizar en esto. ¿Tienes disponibilidad?`);
     const whatsappUrl = `https://wa.me/523331155895?text=${waMessage}`;
 
     setTimeout(() => {
@@ -279,26 +253,34 @@ const App: React.FC = () => {
         />
 
         <div className="max-w-[1400px] mx-auto px-6 h-full flex items-center justify-between">
-          {/* ULTRA LOGO */}
-          <div className="flex items-center gap-5 group cursor-pointer z-50" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
-            <div className={`relative flex items-center justify-center transition-all duration-500 ${isScrolled ? 'w-10 h-10' : 'w-14 h-14'}`}>
+          {/* ULTRA LOGO - High Ticket Refinement */}
+          <div className="flex items-center gap-6 group cursor-pointer z-50" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
+            <div className={`relative flex items-center justify-center transition-all duration-500 ${isScrolled ? 'w-10 h-10' : 'w-12 h-12'}`}>
                <svg viewBox="0 0 100 100" className="w-full h-full text-emerald-600 animate-[spin_12s_linear_infinite] opacity-80">
                  <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="5,5" />
                  <circle cx="50" cy="50" r="30" fill="none" stroke="currentColor" strokeWidth="0.5" />
                </svg>
                <div className="absolute inset-0 flex items-center justify-center">
-                 <Atom className={`text-slate-900 group-hover:text-emerald-600 transition-colors duration-500 ${isScrolled ? 'w-5 h-5' : 'w-7 h-7'}`} />
+                 <Atom className={`text-slate-900 group-hover:text-emerald-600 transition-colors duration-500 ${isScrolled ? 'w-5 h-5' : 'w-6 h-6'}`} />
                </div>
-               <div className="absolute top-0 right-0 w-3 h-3 bg-emerald-500 rounded-full shadow-[0_0_15px_#10b981] animate-pulse border-2 border-white"></div>
+               <div className="absolute top-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full shadow-[0_0_15px_#10b981] animate-pulse border-2 border-white"></div>
             </div>
             
-            {/* Ultra Typography Lockup */}
-            <div className="flex items-baseline gap-[0.15em] relative">
-              <span className={`font-heading font-black leading-none text-slate-900 tracking-tighter uppercase transition-all duration-500 ${isScrolled ? 'text-xl' : 'text-3xl'}`}>
+            {/* Typography Lockup - Monolith & Signature */}
+            <div className="flex items-center gap-1 relative pl-2 border-l border-emerald-500/20">
+              {/* PEPE - The Structural Monolith */}
+              <span className={`font-heading font-black leading-none tracking-[-0.05em] uppercase transition-all duration-500 bg-clip-text text-transparent bg-gradient-to-b from-slate-900 to-slate-700 drop-shadow-sm ${isScrolled ? 'text-2xl' : 'text-3xl'}`}>
                 PEPE
               </span>
-              <span className={`font-serif-display text-emerald-600 italic font-light transition-all duration-500 ${isScrolled ? 'text-base' : 'text-2xl'}`}>
-                Pérez<span className="text-emerald-400 font-bold ml-[1px]">.</span>
+              
+              {/* Pérez - The Fluid Signature */}
+              <span className={`font-serif-display italic font-light text-emerald-600 transition-all duration-500 relative z-10 ${isScrolled ? 'text-xl' : 'text-3xl'} -ml-1`}>
+                Pérez
+                {/* Bio-Spark Accent */}
+                <span className="absolute -top-1 -right-2 flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
               </span>
             </div>
           </div>
@@ -308,7 +290,7 @@ const App: React.FC = () => {
             {[
               { label: 'Sobre Mí', id: Section.SOBRE_MI },
               { label: 'Metodología', id: Section.METODOLOGIA },
-              { label: 'Decodificador', id: Section.DECODIFICADOR },
+              { label: 'Espejo Emocional', id: Section.DECODIFICADOR },
             ].map((item) => (
               <button 
                 key={item.label} 
@@ -338,7 +320,7 @@ const App: React.FC = () => {
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu Overlay with Parallax */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
@@ -346,25 +328,52 @@ const App: React.FC = () => {
             animate={{ opacity: 1, clipPath: "circle(150% at 100% 0)" }}
             exit={{ opacity: 0, clipPath: "circle(0% at 100% 0)" }}
             transition={{ type: "spring", damping: 25, stiffness: 100 }}
-            className="fixed inset-0 z-[90] bg-slate-50/95 backdrop-blur-3xl flex flex-col items-center justify-center gap-8 md:hidden"
+            className="fixed inset-0 z-[90] bg-slate-50/95 backdrop-blur-3xl flex flex-col items-center justify-center gap-8 md:hidden overflow-hidden"
+            onMouseMove={handleMenuMouseMove}
           >
-            {[
-              { label: 'Sobre Mí', id: Section.SOBRE_MI },
-              { label: 'Metodología', id: Section.METODOLOGIA },
-              { label: 'Decodificador', id: Section.DECODIFICADOR },
-              { label: 'Contacto', id: Section.CONTACTO },
-            ].map((item, i) => (
-              <motion.button
-                key={item.label}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                onClick={() => scrollToSection(item.id)}
-                className="text-5xl font-heading font-bold text-slate-900 hover:text-emerald-600 transition-colors tracking-tighter"
-              >
-                {item.label}
-              </motion.button>
-            ))}
+            {/* Parallax Background Layers */}
+            <motion.div 
+              className="absolute top-[-20%] right-[-20%] w-[80vw] h-[80vw] bg-emerald-400/20 rounded-full blur-[100px] pointer-events-none mix-blend-multiply"
+              style={{
+                x: useTransform(menuMouseX, (val) => val * -20),
+                y: useTransform(menuMouseY, (val) => val * -20),
+              }}
+            />
+             <motion.div 
+              className="absolute bottom-[-10%] left-[-10%] w-[60vw] h-[60vw] bg-teal-400/20 rounded-full blur-[80px] pointer-events-none mix-blend-multiply"
+              style={{
+                x: useTransform(menuMouseX, (val) => val * -30),
+                y: useTransform(menuMouseY, (val) => val * -30),
+              }}
+            />
+            
+            {/* Content with subtle opposite parallax for depth */}
+            <motion.div
+              className="flex flex-col items-center gap-8 relative z-10"
+              style={{
+                x: useTransform(menuMouseX, (val) => val * 10),
+                y: useTransform(menuMouseY, (val) => val * 10),
+              }}
+            >
+              {[
+                { label: 'Sobre Mí', id: Section.SOBRE_MI },
+                { label: 'Metodología', id: Section.METODOLOGIA },
+                { label: 'Espejo Emocional', id: Section.DECODIFICADOR },
+                { label: 'Contacto', id: Section.CONTACTO },
+              ].map((item, i) => (
+                <motion.button
+                  key={item.label}
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1, duration: 0.5, ease: "easeOut" }}
+                  onClick={() => scrollToSection(item.id)}
+                  className="text-5xl font-heading font-bold text-slate-900 hover:text-emerald-600 transition-colors tracking-tighter"
+                  whileHover={{ scale: 1.05, x: 10 }}
+                >
+                  {item.label}
+                </motion.button>
+              ))}
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -402,12 +411,12 @@ const App: React.FC = () => {
                 FORMAR
               </span>
               <span className="font-serif-display italic font-light text-[3.5rem] lg:text-[5.5rem] text-emerald-600 -mt-2 lg:-mt-8 ml-2 opacity-90 leading-tight">
-                tu mirada interior
+                tu percepción
               </span>
             </h1>
             
             <p className="text-xl md:text-2xl font-light text-slate-600 max-w-lg leading-relaxed mb-14 pl-6 border-l-4 border-emerald-500/30">
-              Acompañamiento profesional de vanguardia para descifrar el mensaje biológico de tus síntomas y recuperar tu paz emocional.
+              Tu paz comienza cuando cambia tu forma de ver el mundo. Acompañamiento profesional en Bioneuroemoción® para gestionar conflictos y recuperar tu bienestar.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto">
@@ -415,14 +424,14 @@ const App: React.FC = () => {
                 onClick={() => window.open(`https://wa.me/523331155895?text=${WHATSAPP_MESSAGE}`, '_blank')}
                 className="bg-slate-900 text-white px-12 py-6 rounded-full text-sm font-black tracking-widest uppercase hover:bg-emerald-900 transition-all duration-500 hover:-translate-y-1 relative overflow-hidden group shadow-[0_20px_50px_-10px_rgba(0,0,0,0.5)] hover:shadow-[0_25px_60px_-12px_rgba(6,78,59,0.6)]"
               >
-                <span className="relative z-10 flex items-center gap-2">Agendar Sesión <ArrowRight className="w-4 h-4" /></span>
+                <span className="relative z-10 flex items-center gap-2">Solicitar Acompañamiento <ArrowRight className="w-4 h-4" /></span>
                 <div className="absolute inset-0 bg-gradient-to-r from-emerald-800 to-slate-900 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               </button>
               <button 
                 onClick={() => scrollToSection(Section.DECODIFICADOR)}
                 className="group relative px-12 py-6 rounded-full bg-white border border-slate-200 text-slate-900 text-sm font-black tracking-widest uppercase hover:border-emerald-500 transition-all overflow-hidden hover:shadow-lg"
               >
-                <span className="relative z-10 group-hover:text-emerald-700 transition-colors">Decodificador</span>
+                <span className="relative z-10 group-hover:text-emerald-700 transition-colors">Espejo Emocional</span>
               </button>
             </div>
           </motion.div>
@@ -450,9 +459,9 @@ const App: React.FC = () => {
               <div className="absolute bottom-12 left-0 bg-white/80 backdrop-blur-xl pl-8 pr-10 py-6 rounded-r-2xl border-y border-r border-white/60 shadow-[0_10px_30px_rgba(0,0,0,0.05)] z-20">
                 <div className="flex items-center gap-3 mb-1">
                    <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                   <span className="text-[10px] font-black uppercase tracking-widest text-emerald-800">Status Online</span>
+                   <span className="text-[10px] font-black uppercase tracking-widest text-emerald-800">Agenda Abierta</span>
                 </div>
-                <p className="font-heading font-bold text-xl text-slate-900 leading-none">Consultas Disponibles</p>
+                <p className="font-heading font-bold text-xl text-slate-900 leading-none">Sesiones Disponibles</p>
               </div>
             </div>
           </motion.div>
@@ -487,17 +496,17 @@ const App: React.FC = () => {
           
           <div className="md:col-span-7">
             <h2 className="text-6xl md:text-8xl font-heading font-bold text-slate-900 mb-8 leading-[0.9] tracking-tighter break-words">
-              Máster en <br/>
+              Consultor en <br/>
               <span className="font-serif-display italic text-emerald-700 font-normal text-5xl md:text-7xl">Bioneuroemoción®</span>
             </h2>
             
             <div className="space-y-8 text-xl text-slate-700 font-light leading-8">
               <p>
                 <span className="text-7xl float-left mr-4 mt-[-15px] font-heading font-black text-emerald-800 opacity-20">M</span>
-                i nombre es <strong className="text-slate-900 font-bold">Pepe Pérez</strong>. Mi labor no es curarte, sino acompañarte a que tomes conciencia de "para qué" tu cuerpo ha generado un síntoma.
+                i nombre es <strong className="text-slate-900 font-bold">Pepe Pérez</strong>. Mi labor es acompañarte a explorar tu universo emocional para que tomes conciencia de "para qué" estás viviendo tus conflictos actuales.
               </p>
               <p>
-                Certificado por el <strong className="text-slate-900 border-b-2 border-emerald-300 hover:bg-emerald-50 transition-colors">Enric Corbera Institute</strong>, utilizo una metodología de vanguardia que integra conocimientos de biología, psicología y epigenética conductual para desactivar programas inconscientes.
+                Certificado por el <strong className="text-slate-900 border-b-2 border-emerald-300 hover:bg-emerald-50 transition-colors">Enric Corbera Institute</strong>, facilito un proceso de autoindagación que te permite cambiar la percepción de lo que vives, pasando del estrés a la coherencia emocional.
               </p>
               
               <div className="pt-12">
@@ -507,7 +516,7 @@ const App: React.FC = () => {
                     <div className="h-px bg-gradient-to-r from-transparent via-slate-300 to-transparent flex-1"></div>
                  </div>
                  <p className="text-center font-serif-display italic text-3xl text-slate-900 mt-8">
-                  "La enfermedad es el esfuerzo que hace la naturaleza para sanar al hombre."
+                  "Todo lo que nos irrita de los demás nos puede llevar a un entendimiento de nosotros mismos."
                  </p>
                  <p className="text-center text-xs font-black tracking-[0.2em] uppercase text-emerald-600 mt-4">— Carl G. Jung</p>
               </div>
@@ -550,7 +559,7 @@ const App: React.FC = () => {
               className="inline-flex items-center gap-3 py-2 px-5 rounded-full border border-emerald-500/30 bg-emerald-950/50 backdrop-blur-md mb-8 shadow-[0_0_20px_rgba(16,185,129,0.2)]"
             >
               <ScanLine className="w-4 h-4 text-emerald-400 animate-spin-slow" />
-              <span className="text-emerald-400 text-xs font-bold tracking-[0.2em] uppercase">System Ready</span>
+              <span className="text-emerald-400 text-xs font-bold tracking-[0.2em] uppercase">Herramienta Interactiva</span>
             </motion.div>
             
             <motion.h2 
@@ -565,13 +574,13 @@ const App: React.FC = () => {
                 transition: { duration: 1.5, repeat: Infinity }
               }}
             >
-              DECODIFICADOR <span className="text-stroke-light font-serif-display italic font-light text-emerald-300 block md:inline">Emocional</span>
+              ESPEJO <span className="text-stroke-light font-serif-display italic font-light text-emerald-300 block md:inline">Emocional</span>
             </motion.h2>
             <motion.p 
               variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
               className="text-slate-400 text-xl md:text-2xl font-light max-w-2xl mx-auto leading-relaxed"
             >
-              INICIAR ESCANEO EMOCIONAL
+              ¿QUÉ SITUACIÓN O EMOCIÓN TE QUITA LA PAZ HOY?
             </motion.p>
           </motion.div>
 
@@ -621,7 +630,7 @@ const App: React.FC = () => {
                           type="text" 
                           value={symptom}
                           onChange={(e) => setSymptom(e.target.value)}
-                          placeholder="ESCRIBE TU EMOCIÓN..."
+                          placeholder="CONFLICTOS DE PAREJA, ANSIEDAD, TRABAJO..."
                           className="w-full bg-transparent border-b-2 border-slate-800 p-6 text-3xl md:text-5xl text-center text-white placeholder-slate-700 focus:outline-none focus:border-emerald-400 transition-all duration-300 font-heading font-black uppercase tracking-tight relative z-10 caret-emerald-500"
                         />
                         {/* Glowing Underline Glow */}
@@ -641,7 +650,7 @@ const App: React.FC = () => {
                         {isDecoding ? (
                            <span className="flex items-center gap-3 font-mono text-sm">
                               <span className="w-1.5 h-1.5 bg-emerald-500 rounded-sm animate-ping"></span>
-                              [ PROCESANDO DATOS ]
+                              [ REFLEXIONANDO ]
                            </span>
                         ) : (
                            <>
@@ -670,7 +679,7 @@ const App: React.FC = () => {
                       
                       <div className="inline-block px-6 py-2 rounded-sm border-x border-emerald-500/30 bg-emerald-900/20 backdrop-blur-md">
                          <h3 className="text-xs font-black uppercase tracking-[0.25em] text-emerald-300">
-                           Análisis Completado
+                           Reflexión Generada
                          </h3>
                       </div>
                     </div>
@@ -716,7 +725,7 @@ const App: React.FC = () => {
                       >
                         <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-12"></div>
                         <MessageCircle className="w-5 h-5 fill-current" />
-                        <span>DESACTIVAR PROGRAMA EN WHATSAPP</span>
+                        <span>SOLICITAR ACOMPAÑAMIENTO</span>
                         <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                       </button>
                       <button 
@@ -751,7 +760,7 @@ const App: React.FC = () => {
             </h2>
           </div>
           <p className="max-w-md text-slate-600 text-right mt-8 md:mt-0 font-normal text-lg">
-            Un camino estructurado hacia tu libertad emocional, basado en la precisión biológica y la compasión humana.
+            Un camino estructurado hacia tu libertad emocional, basado en la toma de conciencia y la gestión de la percepción.
           </p>
         </div>
 
@@ -861,11 +870,11 @@ const App: React.FC = () => {
         <div className="max-w-7xl mx-auto px-6 py-16 md:py-24 grid md:grid-cols-2 gap-20 relative z-10">
           <div>
             <div className="mb-12 relative group cursor-default">
-              {/* ULTRA PREMIUM FOOTER LOGO */}
-               <h3 className="font-heading text-[6rem] md:text-[9rem] font-black tracking-tighter text-transparent text-stroke-light leading-[0.8] select-none opacity-50 transition-opacity duration-500 group-hover:opacity-100">
+              {/* ULTRA PREMIUM FOOTER LOGO - The Masterpiece */}
+               <h3 className="font-heading text-[6rem] md:text-[9rem] font-black tracking-tighter text-transparent text-stroke-light leading-[0.8] select-none opacity-50 transition-all duration-500 group-hover:opacity-100 group-hover:text-stroke-emerald">
                  PEPE
                </h3>
-               <span className="absolute top-[45%] left-12 md:left-24 font-serif-display italic text-5xl md:text-7xl text-emerald-500 font-light mix-blend-plus-lighter">
+               <span className="absolute top-[45%] left-12 md:left-24 font-serif-display italic text-5xl md:text-7xl text-emerald-500 font-light mix-blend-plus-lighter drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]">
                  Pérez
                </span>
             </div>
