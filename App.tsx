@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
 */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence, useSpring } from 'framer-motion';
 import { Menu, X, Brain, Sparkles, MessageCircle, Activity, Atom, ArrowRight, Quote, Instagram, Linkedin, ArrowUp, Lock, Zap, CheckCircle2, ShieldCheck, Award, Users, Verified } from 'lucide-react';
 import FluidBackground from './components/FluidBackground';
@@ -47,19 +47,19 @@ const TESTIMONIALS = [
   },
   {
     id: 2,
+    name: "Gabriela D.",
+    role: "Interiorista",
+    image: "https://i.ibb.co/TqvzwtT7/Whats-App-Image-2025-12-03-at-09-21-22.jpg",
+    quote: "Pepe me ayudó a ver que forzaba un camino ajeno. Al redirigir mi energía hacia mi felicidad, las oportunidades reales aparecieron. Hoy soy remunerada por lo que amo hacer.",
+    impact: "Propósito Real"
+  },
+  {
+    id: 3,
     name: "Roberto Almazán",
     role: "Arquitecto",
     image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=400&h=400",
     quote: "Escéptico al principio, pero la claridad mental que obtuve fue inmediata. Entender mis proyecciones me devolvió la tranquilidad.",
     impact: "Paz Mental"
-  },
-  {
-    id: 3,
-    name: "Sofia K.",
-    role: "Artista Visual",
-    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400&h=400",
-    quote: "Más que una consulta, es un despertar. Dejé de sentirme víctima de las circunstancias para convertirme en responsable.",
-    impact: "Empoderamiento"
   }
 ];
 
@@ -101,36 +101,54 @@ const App: React.FC = () => {
     // Initial check
     handleResize();
     
+    // OPTIMIZED SCROLL HANDLER (RequestAnimationFrame + DOM Caching)
+    let ticking = false;
+    
+    // Cache section elements to avoid repeated DOM queries during scroll
+    const sectionIds = [
+      Section.HERO, 
+      Section.SOBRE_MI, 
+      Section.DECODIFICADOR, 
+      Section.METODOLOGIA, 
+      Section.TESTIMONIOS, 
+      Section.CONTACTO
+    ];
+
+    const cachedElements = new Map<string, HTMLElement | null>();
+    // Pre-fetch elements
+    sectionIds.forEach(id => {
+      cachedElements.set(id, document.getElementById(id));
+    });
+
     const handleScroll = () => {
-      const scrollY = window.scrollY;
-      setIsScrolled(scrollY > 20);
-      setShowScrollTop(scrollY > 300);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+          setIsScrolled(scrollY > 20);
+          setShowScrollTop(scrollY > 300);
 
-      // ScrollSpy Logic - Highlight active section
-      // Define sections in DOM order
-      const sections = [
-        Section.HERO, 
-        Section.SOBRE_MI, 
-        Section.DECODIFICADOR, 
-        Section.METODOLOGIA, 
-        Section.TESTIMONIOS, 
-        Section.CONTACTO
-      ];
-
-      // Find the last section that has its top above a certain threshold (150px offset)
-      // 150px accounts for the header height and some breathing room
-      let current = Section.HERO;
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          // Check if the top of the section is active (e.g., scrolled past top + offset)
-          if (rect.top <= 150) {
-            current = section;
+          // Highly Optimized ScrollSpy
+          const threshold = 180;
+          let current = Section.HERO;
+          
+          for (let i = sectionIds.length - 1; i >= 0; i--) {
+            const id = sectionIds[i];
+            const element = cachedElements.get(id); // Use cache
+            if (element) {
+              const rect = element.getBoundingClientRect();
+              if (rect.top <= threshold) {
+                current = id as Section;
+                break;
+              }
+            }
           }
-        }
+          
+          setActiveSection(current);
+          ticking = false;
+        });
+        
+        ticking = true;
       }
-      setActiveSection(current);
     };
 
     window.addEventListener('resize', handleResize);
@@ -147,7 +165,7 @@ const App: React.FC = () => {
     
     const element = document.getElementById(id);
     if (element) {
-      const offset = 120;
+      const offset = 110; // Precision tuned: Header height + minimal breathing room
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.scrollY - offset;
 
@@ -285,9 +303,49 @@ const App: React.FC = () => {
         <div className="max-w-[1400px] mx-auto px-6 h-full flex items-center justify-between">
           {/* LOGO LOCKUP - Ultra-Premium Typography */}
           <div className="flex items-center gap-4 group cursor-pointer" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
-            <div className={`relative transition-all duration-500 ${isScrolled ? 'scale-75' : 'scale-100'}`}>
-               <Atom className="w-10 h-10 text-slate-900 group-hover:rotate-180 transition-transform duration-1000 ease-in-out" strokeWidth={1.5} />
-               <div className="absolute top-0 right-0 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white shadow-[0_0_15px_rgba(16,185,129,0.8)] animate-pulse"></div>
+            
+            {/* ANIMATED BIO-NODE ICON LOGO */}
+            <div className={`relative w-12 h-12 flex items-center justify-center transition-all duration-500 ${isScrolled ? 'scale-75' : 'scale-100'}`}>
+               {/* Ambient Glow */}
+               <div className="absolute inset-0 bg-emerald-500/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+               {/* Outer Rotating Ring (Dashed) */}
+               <motion.div
+                 className="absolute inset-0 rounded-full border border-dashed border-slate-300 opacity-70"
+                 animate={{ rotate: 360 }}
+                 transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+               />
+
+               {/* Middle Counter-Rotating Ring (Structural) */}
+               <motion.div
+                 className="absolute inset-1 rounded-full border border-slate-900/5 border-t-emerald-500 border-r-emerald-500"
+                 animate={{ rotate: -360 }}
+                 transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+               />
+
+               {/* The Atom Core */}
+               <motion.div
+                 className="relative z-10 text-slate-900 group-hover:text-emerald-700 transition-colors duration-500"
+                 whileHover={{ scale: 1.1 }}
+               >
+                 <Atom className="w-6 h-6" strokeWidth={2} />
+               </motion.div>
+
+               {/* Central Bio-Heartbeat */}
+               <motion.div
+                 className="absolute w-2 h-2 bg-emerald-500 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.8)]"
+                 animate={{ scale: [1, 1.3, 1], opacity: [0.8, 0.4, 0.8] }}
+                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+               />
+
+               {/* Orbiting Satellite (3D Depth Effect) */}
+               <motion.div
+                 className="absolute inset-0"
+                 animate={{ rotate: 360 }}
+                 transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+               >
+                  <span className="absolute top-0 left-1/2 -translate-x-1/2 -mt-1 w-1.5 h-1.5 bg-slate-900 rounded-full border border-white shadow-sm"></span>
+               </motion.div>
             </div>
             
             <div className="flex flex-col justify-center relative h-10 w-auto min-w-[140px]">
@@ -576,7 +634,7 @@ const App: React.FC = () => {
         className="py-32 bg-white relative overflow-hidden"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
-        viewport={{ once: true, margin: "-100px" }}
+        viewport={{ once: true, margin: "-10%" }}
       >
         <div className="max-w-[1200px] mx-auto px-6 grid md:grid-cols-12 gap-20 items-center">
           <div className="md:col-span-5 relative group">
@@ -733,13 +791,13 @@ const App: React.FC = () => {
         </div>
       </section>
 
-      {/* METHODOLOGY SECTION - ENHANCED BLUEPRINT DESIGN */}
+      {/* METHODOLOGY SECTION - ENHANCED BLUEPRINT DESIGN - FASTER PHYSICS */}
       <motion.section 
         id={Section.METODOLOGIA} 
         className="py-40 max-w-[1400px] mx-auto px-6 relative bg-slate-50"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
+        viewport={{ once: true, margin: "-10%" }} // Triggers slightly earlier for smoother flow
       >
         {/* Connecting Line (Desktop) */}
         <div className="absolute top-[60%] left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-200 to-transparent hidden md:block z-0 opacity-40"></div>
@@ -764,10 +822,10 @@ const App: React.FC = () => {
           {METHODOLOGY.map((step, index) => (
             <motion.div
               key={step.id}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
+              viewport={{ once: true, margin: "-10%" }} // Snappy trigger
+              transition={{ delay: index * 0.1, duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }} // Spring-like fast ease
               whileHover={{ y: -10 }}
               className="relative bg-white/60 backdrop-blur-xl p-10 rounded-[2.5rem] border border-white shadow-[0_20px_40px_-10px_rgba(0,0,0,0.05)] hover:shadow-[0_40px_80px_-20px_rgba(16,185,129,0.15)] group overflow-hidden transition-all duration-700"
             >
@@ -830,7 +888,7 @@ const App: React.FC = () => {
                 initial={{ opacity: 0, y: 100 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
-                transition={{ delay: i * 0.2, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ delay: i * 0.1, duration: 0.6, ease: "easeOut" }} // Faster entrance
                 whileHover={{ y: -15, scale: 1.02 }}
                 className={`relative group rounded-[2rem] overflow-hidden border border-white/10 bg-slate-900/20 backdrop-blur-3xl hover:border-cyan-400/30 hover:shadow-[0_20px_50px_rgba(6,182,212,0.15)] transition-all duration-700 ${i === 0 ? 'md:col-span-2 md:row-span-2' : ''}`}
               >
