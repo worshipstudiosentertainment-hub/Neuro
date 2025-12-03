@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence, useSpring } from 'framer-motion';
-import { Menu, X, Brain, Ear, Sparkles, MessageCircle, Activity, Dna, ScanLine, Atom, ArrowRight, Quote, Instagram, Linkedin, ArrowUp } from 'lucide-react';
+import { Menu, X, Brain, Ear, Sparkles, MessageCircle, Activity, Dna, ScanLine, Atom, ArrowRight, Quote, Instagram, Linkedin, ArrowUp, Fingerprint } from 'lucide-react';
 import FluidBackground from './components/FluidBackground';
 import AIChat from './components/AIChat';
 import CustomCursor from './components/CustomCursor';
@@ -40,10 +40,10 @@ const METHODOLOGY: MethodologyStep[] = [
 const TESTIMONIALS = [
   {
     id: 1,
-    name: "Mariana Velázquez",
-    role: "CEO & Fundadora",
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200&h=200",
-    quote: "Llegué buscando alivio para una gastritis crónica y encontré la raíz de mi estrés laboral. La claridad que te da Pepe es quirúrgica."
+    name: "J.P. Rojo",
+    role: "Empresario",
+    image: "https://i.ibb.co/7JBhKpFx/Whats-App-Image-2025-11-19-at-15-29-30.jpg",
+    quote: "Pepe me mostró el ángulo preciso para ver lo que me dolía desde otra perspectiva. Transformé ese conflicto en nuevas herramientas y visiones para mejorar mi vida. Poco a poco, expando esta nueva mirada."
   },
   {
     id: 2,
@@ -80,7 +80,12 @@ const App: React.FC = () => {
   
   // Decoder State
   const [symptom, setSymptom] = useState('');
-  const [decoderResult, setDecoderResult] = useState<string | null>(null);
+  const [decoderResult, setDecoderResult] = useState<{
+    title: string;
+    core: string;
+    hook: string;
+    whatsappUrl: string;
+  } | null>(null);
   const [isDecoding, setIsDecoding] = useState(false);
 
   useEffect(() => {
@@ -95,20 +100,20 @@ const App: React.FC = () => {
   const scrollToSection = (id: string) => {
     setMobileMenuOpen(false);
     
-    // Small timeout to ensure menu close animation starts/layout stabilizes
+    // Increased timeout to 50ms to ensure menu close animation allows proper reflow on mobile devices
     setTimeout(() => {
       const element = document.getElementById(id);
       if (element) {
         // Use getBoundingClientRect for absolute precision relative to current view
         const elementPosition = element.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.scrollY - 100;
+        const offsetPosition = elementPosition + window.scrollY - 100; // 100px offset for sticky header
 
         window.scrollTo({
           top: offsetPosition,
           behavior: 'smooth'
         });
       }
-    }, 10);
+    }, 50);
   };
 
   const handleDecode = () => {
@@ -117,61 +122,101 @@ const App: React.FC = () => {
     
     const lowerSymptom = symptom.toLowerCase();
     
-    // Default analysis
-    let analysis = "Tu biología está gestionando una carga emocional que la mente consciente ha ignorado. El síntoma es la respuesta de adaptación a un estrés vivido en soledad.";
-    let hookQuestion = "¿Qué situación inesperada viviste recientemente que te dejó sin recursos para reaccionar?";
+    // Default Neuromarketing Response
+    let title = "Estrés de Supervivencia";
+    let core = "Tu sistema está gestionando una carga emocional que la mente racional no ha podido resolver. El síntoma no es el problema, es la solución que encontró tu cuerpo para sobrevivir a un entorno hostil.";
+    let hook = "Esta adaptación consume tu energía vital. ¿Cuánto tiempo más vas a permitir que este programa dirija tu vida?";
+    let waConflict = "Estrés Inconsciente";
 
-    // Advanced Regex Matching
+    // Advanced Regex Matching with Neuro-Copywriting
     if (lowerSymptom.match(/cabeza|migraña|cefalea|cerebro|mente/)) {
-      analysis = "Conflicto de desvalorización intelectual. Sucede cuando 'calentamos' la mente buscando una salida racional a un problema emocional, o cuando nos juzgamos duramente.";
-      hookQuestion = "¿Estás controlando cada detalle para evitar un error, o te criticas despiadadamente por una decisión tomada?";
+      title = "Desvalorización Intelectual";
+      core = "Más allá del dolor físico, tu cuerpo manifiesta un conflicto de 'Desvalorización Intelectual'. Es posible que estés viviendo una situación donde sientes que tus ideas no son válidas o te juzgas severamente por no encontrar una solución racional a un problema. La migraña es el intento biológico de 'bajar el interruptor' ante un exceso de pensamiento analítico.";
+      hook = "Tu mente necesita descansar del juicio constante. En consulta, iremos al origen de esta autoexigencia para que no necesites enfermar para detenerte.";
+      waConflict = "Desvalorización Intelectual (Migrañas)";
     } else if (lowerSymptom.match(/est[oó]mago|panza|digest|indigest|acidez|gastritis|reflujo|v[oó]mito/)) {
-      analysis = "Conflicto de 'bocado indigesto'. Has tenido que aceptar ('tragar') una situación, palabra o acción que consideras inaceptable, tóxica o injusta.";
-      hookQuestion = "¿Qué 'sapo' te has tenido que tragar recientemente en tu entorno familiar o laboral para evitar una guerra mayor?";
+      title = "El Bocado Indigesto";
+      core = "El 'Bocado Indigesto' habla de una situación o persona que has tenido que aceptar en contra de tu voluntad. Biológicamente, tu estómago genera más ácido para descomponer algo que te resulta 'tóxico' o injusto, pero que sientes que no puedes rechazar. Es la rabia contenida por lo que te obligaron a tragar.";
+      hook = "Seguir digiriendo lo inaceptable está quemando tu bienestar. Agendemos una sesión para identificar ese 'bocado' y aprender a soltarlo desde la conciencia, no desde el síntoma.";
+      waConflict = "Conflicto de Bocado Indigesto (Estómago)";
     } else if (lowerSymptom.match(/h[ií]gado|bilis|colesterol|grasa|hepat/)) {
-      analysis = "Miedo profundo a la carencia. El hígado es el laboratorio del cuerpo; acumula reservas cuando el inconsciente percibe que 'faltará' alimento, dinero o fe.";
-      hookQuestion = "¿Te preocupa obsesivamente la estabilidad económica de tu familia o sientes que te falta el sustento esencial?";
+      title = "Miedo a la Carencia";
+      core = "El hígado acumula reservas porque tu inconsciente percibe un miedo profundo a la carencia. No se trata solo de dinero o alimento, sino de sentir que te falta algo esencial para sobrevivir (amor, fe, reconocimiento). Tu cuerpo está en modo de ahorro energético ante un 'desierto' emocional.";
+      hook = "Vivir en modo 'supervivencia' te impide conectar con la abundancia real. Permíteme acompañarte a transformar esa percepción de escasez en confianza vital.";
+      waConflict = "Miedo a la Carencia (Hígado)";
     } else if (lowerSymptom.match(/garganta|tos|laringe|faringe|tiroides|voz|ahogo|anginas/)) {
-      analysis = "Conflicto de la 'presa atrapada'. Palabras que se quedaron en el umbral, gritos ahogados, o la imposibilidad de atrapar (o escupir) algo vital.";
-      hookQuestion = "¿Qué es eso tan importante que no te atreviste a decir, o que dijiste y ahora te arrepientes profundamente?";
+      title = "La Presa que no Atrapas";
+      core = "Tu garganta cierra el paso a palabras que quedaron atrapadas. Puede ser el conflicto de 'la presa que no atrapo' (lo que quiero decir y no digo) o 'la presa que no puedo escupir' (lo que tuve que callar para evitar un conflicto mayor). El cuerpo inflama la zona para procesar ese silencio.";
+      hook = "Lo que la boca calla, el cuerpo lo grita. En nuestra sesión, daremos voz a esa emoción reprimida para que tu garganta recupere su función de expresar, no de contener.";
+      waConflict = "Palabras No Dichas (Garganta)";
     } else if (lowerSymptom.match(/pulm[oó]n|respir|aire|asma|bronqui|neumo/)) {
-      analysis = "Amenaza en el territorio o miedo arcaico a morir. Sentir que alguien nos asfixia, nos invade o nos quita el aire vital.";
-      hookQuestion = "¿Quién está invadiendo tu espacio personal de forma que sientes que te falta el aire para ser tú mismo?";
+      title = "Amenaza en el Territorio";
+      core = "Los pulmones gestionan la vida misma: el aire. Este síntoma suele esconder un 'Miedo a la Muerte' o una invasión en tu territorio. Sientes que alguien te asfixia, te quita el aire o invade tu espacio vital. Es una lucha silenciosa por tu derecho a existir.";
+      hook = "Nadie debería tener que luchar por su propio aire. Vamos a trabajar juntos para delimitar tu territorio emocional y que puedas volver a respirar con plena libertad.";
+      waConflict = "Amenaza en el Territorio (Pulmones)";
     } else if (lowerSymptom.match(/ri[ñn][oó]n|orina|cistitis|l[ií]quido|renal|calculo/)) {
-      analysis = "Conflicto de liquidez y referentes. Sentirse como 'pez fuera del agua', desmoronado, sin puntos de apoyo firmes, o miedo a perderlo todo.";
-      hookQuestion = "¿Te has sentido solo ante el peligro, abandonado a tu suerte o has perdido tus puntos de referencia vitales?";
+      title = "Derrumbamiento Existencial";
+      core = "Los riñones simbolizan los referentes. Un problema aquí refleja un sentimiento de 'pez fuera del agua', de haber perdido el suelo bajo tus pies o estar solo ante el peligro. El cuerpo retiene líquidos para no 'secarse' emocionalmente ante la pérdida de apoyo.";
+      hook = "El miedo a la soledad o a la pérdida desestabiliza tu base. Te invito a reestructurar tus referentes internos en una sesión para que tu cuerpo deje de retener miedo.";
+      waConflict = "Conflicto de Referentes (Riñones)";
     } else if (lowerSymptom.match(/piel|dermis|eczem|alergia|urticaria|grano|acn[eé]|psoriasis|ronchas/)) {
-      analysis = "Conflicto de separación o contacto impuesto. La piel duele donde nos falta una caricia deseada, o donde hemos recibido un contacto desagradable.";
-      hookQuestion = "¿A quién extrañas tocar desesperadamente, o de quién te gustaría separarte pero convives a diario obligadamente?";
+      title = "Conflicto de Separación";
+      core = "Tu piel es la frontera entre tú y el mundo. Cualquier alteración aquí habla de un dolor por un contacto deseado que se perdió, o la irritación por un contacto no deseado que se impuso. Tu piel reacciona intentando reparar esa ruptura en el vínculo.";
+      hook = "La herida emocional de la separación sigue abierta en tu dermis. Sanar esa memoria de contacto es fundamental para que tu piel recupere su integridad.";
+      waConflict = "Conflicto de Separación (Piel)";
     } else if (lowerSymptom.match(/hueso|articul|rodilla|hombro|codo|artritis|osteoporo|reuma|cadera|columna/)) {
-      analysis = "Desvalorización profunda del ser. 'No valgo', 'no soy capaz', 'no puedo soportar esta carga'. El hueso se afecta cuando perdemos valor ante nuestros propios ojos.";
-      hookQuestion = "¿En qué pilar fundamental de tu vida sientes que te estás desmoronando o que no eres capaz de 'dar la talla'?";
+      title = "Desvalorización Profunda";
+      core = "El esqueleto sostiene tu valía. Cuando duelen, hablamos de una 'Desvalorización Profunda'. Sientes que no eres lo suficientemente fuerte, capaz o válido para soportar una carga o avanzar. Es el peso de creer que 'no puedes' o 'no vales lo suficiente'.";
+      hook = "Tu estructura física se debilita cuando tu autoconcepto flaquea. Fortalezcamos tu autoestima biológica en consulta para que recuperes tu soporte ante la vida.";
+      waConflict = "Desvalorización Profunda (Huesos/Articulaciones)";
     } else if (lowerSymptom.match(/músculo|fibro|calambre|tendi|contractura|pierna|brazo/)) {
-      analysis = "Impotencia en la acción. La energía para luchar o huir se ha bloqueado. 'Quiero golpear y no puedo', 'quiero irme y debo quedarme'.";
-      hookQuestion = "¿Hacia dónde te impulsa tu instinto biológico, pero tu mente racional te frena en seco?";
+      title = "Impotencia en la Acción";
+      core = "La musculatura representa la potencia. Un dolor aquí indica 'Impotencia': el deseo de realizar un movimiento (luchar, huir, abrazar) que fue reprimido. La energía se quedó cargada en el tejido, esperando una orden de acción que nunca llegó.";
+      hook = "Esa tensión es energía vital estancada por una prohibición mental. Desbloqueemos esa acción reprimida para que tu cuerpo recupere su movimiento natural sin dolor.";
+      waConflict = "Impotencia en la Acción (Músculos)";
     } else if (lowerSymptom.match(/coraz[oó]n|taquicardia|presi[oó]n|hipertensi[oó]n|sangre|cardi/)) {
-      analysis = "Desvalorización por amor o territorio. El corazón bombea la vida (sangre/familia). Conflictos de 'quiero que alguien vuelva a casa' o 'quiero defender mi territorio'.";
-      hookQuestion = "¿Por quién te duele el corazón, o qué miembro de la familia te está exigiendo un esfuerzo sobrehumano para mantener la unión?";
+      title = "Combate por el Territorio";
+      core = "El corazón bombea la vida (sangre) al clan. Sus conflictos se relacionan con el esfuerzo desmedido por mantener unido a los tuyos o defender tu territorio. Sientes que debes luchar constantemente para asegurar el bienestar o la pertenencia de la familia.";
+      hook = "No tienes que cargar solo con el peso emocional de todo tu linaje. Permite que tu corazón descanse compartiendo esa carga en un espacio terapéutico seguro.";
+      waConflict = "Lucha por el Territorio (Corazón)";
     } else if (lowerSymptom.match(/ojo|vis|ver|mio|astigmat|lentes|ciego/)) {
-      analysis = "Miedo en la nuca (peligro por detrás) o negación visual. 'No quiero ver lo que pasa en mi casa', o 'tengo miedo de perder de vista a alguien'.";
-      hookQuestion = "¿Qué realidad dolorosa tienes delante de tus narices y prefieres ignorar para no sufrir?";
+      title = "Miedo Visual";
+      core = "Los ojos filtran la realidad. Un síntoma visual suele ser una protección biológica: 'No quiero ver lo que está pasando'. Puede ser un rechazo a ver una realidad dolorosa o el miedo a perder de vista a alguien importante. Tu biología nubla la vista para suavizar el impacto.";
+      hook = "Lo que te niegas a ver no desaparece, solo se vuelve sombra. Aclaremos tu mirada interior para que puedas enfrentar tu realidad con nuevas herramientas y sin miedo.";
+      waConflict = "Miedo Visual (Ojos)";
     } else if (lowerSymptom.match(/o[ií]do|sorder|zumbido|tinnitus|vertigo|v[eé]rtigo|escuchar/)) {
-      analysis = "Conflicto de audición. 'No puedo creer lo que oigo'. Palabras tóxicas, críticas constantes, o un silencio sepulcral donde debería haber una voz.";
-      hookQuestion = "¿Qué frase hiriente se repite en tu cabeza, o qué 'te quiero' estás esperando y nunca llega?";
+      title = "No Quiero Oírlo";
+      core = "El oído filtra lo que entra a tu mente. Problemas aquí indican 'No quiero escuchar esto' (críticas, juicios) o la angustia de 'No escuchar lo que necesito' (una voz amada, un reconocimiento). Es una barrera de protección ante un ambiente auditivo hostil.";
+      hook = "Aísla el ruido externo para escuchar tu verdad interna. En sesión, podemos filtrar esos mensajes tóxicos para que tu oído no necesite cerrarse al mundo.";
+      waConflict = "Conflicto Auditivo (Oídos)";
     } else if (lowerSymptom.match(/diente|muela|boca|mand[ií]bula|enc[ií]a/)) {
-      analysis = "Conflicto de agresividad contenida. No poder 'mostrar los dientes'. Dificultad para atrapar lo que es tuyo o defenderte de una agresión.";
-      hookQuestion = "¿A quién tienes ganas de morder (defenderte) pero te obligas a sonreír por educación o sumisión?";
+      title = "Agresividad Reprimida";
+      core = "En la naturaleza, los dientes son armas. Un conflicto dental habla de la dificultad para 'mostrar los dientes' o defenderse. Quizás sientes que debes sonreír cuando quieres morder, o que no tienes la fuerza para 'atrapar' tus deseos.";
+      hook = "La rabia no expresada se calcifica en la mandíbula. Aprendamos a gestionar esa fuerza defensiva de forma sana para que no tengas que destruirte a ti mismo para contenerla.";
+      waConflict = "Agresividad Reprimida (Dientes)";
     } else if (lowerSymptom.match(/mujer|ovario|utero|menstru|regla|seno|mama|vagina|candid/)) {
-      analysis = "Conflicto de identidad femenina, pérdida o nido. Problemas en la relación con la pareja, los hijos o la propia feminidad/sexualidad.";
-      hookQuestion = "¿Sientes que tu rol de mujer o madre está en entredicho, o has vivido un conflicto de separación con un hijo o pareja?";
+      title = "Identidad y Nido";
+      core = "Síntomas en órganos femeninos suelen tocar temas de 'Identidad y Nido'. Conflictos sobre cómo vives tu feminidad, tu rol de madre o pareja, o frustraciones no expresadas. A menudo cargamos memorias de dolor o sumisión del linaje femenino.";
+      hook = "Tu cuerpo está expresando un dolor ancestral o presente sobre ser mujer. Honremos y sanemos esa herida para que vivas tu feminidad desde el placer y no desde el conflicto.";
+      waConflict = "Conflicto Femenino/Nido";
     } else if (lowerSymptom.match(/hombre|test[ií]culo|prostata|pr[óo]stata|pene|erecci[oó]n/)) {
-      analysis = "Conflicto de identidad masculina, potencia o territorio. Miedo a no ser suficiente hombre para proteger el clan o satisfacer a la pareja.";
-      hookQuestion = "¿En qué situación sientes que has perdido tu poder o que no eres respetado como la autoridad en tu territorio?";
+      title = "Potencia y Territorio";
+      core = "La biología masculina reacciona ante amenazas al 'Territorio y Potencia'. El miedo a no ser capaz de proteger a los tuyos, a perder tu estatus o a no rendir. Es una herida profunda en el sentido de valía y capacidad de protección.";
+      hook = "La verdadera potencia no viene del esfuerzo, sino de la coherencia interior. Trabajemos en recuperar tu seguridad personal para que tu biología no necesite estar en alerta defensiva.";
+      waConflict = "Conflicto Masculino/Territorio";
     }
+
+    const waMessage = encodeURIComponent(`Hola Pepe, el decodificador me mostró que mi síntoma de *${symptom.toUpperCase()}* es un *${waConflict.toUpperCase()}*. Me resonó mucho la información y siento la urgencia de desactivar este programa emocional. ¿Tienes espacio en agenda?`);
+    const whatsappUrl = `https://wa.me/523331155895?text=${waMessage}`;
 
     setTimeout(() => {
       setIsDecoding(false);
-      setDecoderResult(`${analysis}\n\n${hookQuestion}\n\nIMPORTANTE: Esta pista es solo el comienzo. Para desactivar el programa biológico, debemos viajar al momento exacto del trauma en una sesión personalizada.`);
+      setDecoderResult({
+        title,
+        core,
+        hook,
+        whatsappUrl
+      });
     }, 1800);
   };
 
@@ -184,6 +229,8 @@ const App: React.FC = () => {
     }
   };
 
+  const WHATSAPP_MESSAGE = encodeURIComponent("Hola Pepe, me gustaría agendar una sesión de Acompañamiento Emocional. Mi preferencia de fecha y hora es: ");
+
   return (
     <div className="relative min-h-screen text-slate-900 selection:bg-emerald-500/30 selection:text-emerald-900 overflow-x-hidden font-sans">
       <CustomCursor />
@@ -195,7 +242,7 @@ const App: React.FC = () => {
         href="https://wa.me/523331155895" 
         target="_blank" 
         rel="noopener noreferrer"
-        className="fixed bottom-8 right-8 z-50 bg-[#25D366] text-white p-4 rounded-full glow-emerald hover:scale-110 transition-all duration-300 flex items-center justify-center group"
+        className="fixed bottom-8 right-6 md:right-8 z-[70] bg-[#25D366] text-white p-4 rounded-full glow-emerald hover:scale-110 transition-all duration-300 flex items-center justify-center group"
       >
         <div className="absolute inset-0 rounded-full border border-[#25D366] animate-ping opacity-50"></div>
         <div className="absolute inset-0 rounded-full bg-white/20 animate-pulse"></div>
@@ -210,7 +257,7 @@ const App: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="fixed bottom-8 left-8 z-50 bg-white/10 backdrop-blur-md border border-emerald-500/30 text-emerald-600 p-4 rounded-full glow-emerald hover:bg-emerald-500 hover:text-white transition-all duration-300 shadow-[0_0_20px_rgba(16,185,129,0.2)] group"
+            className="fixed bottom-8 left-6 md:left-8 z-[70] bg-white/10 backdrop-blur-md border border-emerald-500/30 text-emerald-600 p-4 rounded-full glow-emerald hover:bg-emerald-500 hover:text-white transition-all duration-300 shadow-[0_0_20px_rgba(16,185,129,0.2)] group"
           >
             <ArrowUp className="w-6 h-6 group-hover:animate-bounce" />
           </motion.button>
@@ -219,7 +266,7 @@ const App: React.FC = () => {
 
       {/* DYNAMIC SCROLL HEADER */}
       <nav 
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${
+        className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${
           isScrolled 
             ? 'bg-white/80 backdrop-blur-3xl border-b border-emerald-900/5 h-20 shadow-[0_4px_30px_-5px_rgba(0,0,0,0.03)]' 
             : 'bg-transparent border-b border-transparent h-28'
@@ -233,7 +280,7 @@ const App: React.FC = () => {
 
         <div className="max-w-[1400px] mx-auto px-6 h-full flex items-center justify-between">
           {/* ULTRA LOGO */}
-          <div className="flex items-center gap-4 group cursor-pointer z-50" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
+          <div className="flex items-center gap-5 group cursor-pointer z-50" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
             <div className={`relative flex items-center justify-center transition-all duration-500 ${isScrolled ? 'w-10 h-10' : 'w-14 h-14'}`}>
                <svg viewBox="0 0 100 100" className="w-full h-full text-emerald-600 animate-[spin_12s_linear_infinite] opacity-80">
                  <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="5,5" />
@@ -245,12 +292,13 @@ const App: React.FC = () => {
                <div className="absolute top-0 right-0 w-3 h-3 bg-emerald-500 rounded-full shadow-[0_0_15px_#10b981] animate-pulse border-2 border-white"></div>
             </div>
             
-            <div className="flex flex-col">
-              <span className={`font-heading font-black leading-none text-slate-900 tracking-tighter uppercase transition-all duration-500 ${isScrolled ? 'text-lg' : 'text-2xl'}`}>
-                José Alberto
+            {/* Ultra Typography Lockup */}
+            <div className="flex items-baseline gap-[0.15em] relative">
+              <span className={`font-heading font-black leading-none text-slate-900 tracking-tighter uppercase transition-all duration-500 ${isScrolled ? 'text-xl' : 'text-3xl'}`}>
+                PEPE
               </span>
-              <span className={`font-serif-display tracking-[0.2em] text-emerald-700 italic font-medium transition-all duration-500 ${isScrolled ? 'text-xs' : 'text-sm'}`}>
-                Pérez Franco
+              <span className={`font-serif-display text-emerald-600 italic font-light transition-all duration-500 ${isScrolled ? 'text-base' : 'text-2xl'}`}>
+                Pérez<span className="text-emerald-400 font-bold ml-[1px]">.</span>
               </span>
             </div>
           </div>
@@ -298,7 +346,7 @@ const App: React.FC = () => {
             animate={{ opacity: 1, clipPath: "circle(150% at 100% 0)" }}
             exit={{ opacity: 0, clipPath: "circle(0% at 100% 0)" }}
             transition={{ type: "spring", damping: 25, stiffness: 100 }}
-            className="fixed inset-0 z-40 bg-slate-50/95 backdrop-blur-3xl flex flex-col items-center justify-center gap-8 md:hidden"
+            className="fixed inset-0 z-[90] bg-slate-50/95 backdrop-blur-3xl flex flex-col items-center justify-center gap-8 md:hidden"
           >
             {[
               { label: 'Sobre Mí', id: Section.SOBRE_MI },
@@ -322,7 +370,7 @@ const App: React.FC = () => {
       </AnimatePresence>
 
       {/* HERO SECTION - TYPOGRAPHY MASTERPIECE */}
-      <header id={Section.HERO} className="relative min-h-screen flex items-center pt-24 pb-12 overflow-hidden">
+      <header id={Section.HERO} className="relative min-h-screen flex items-center pt-24 pb-12 overflow-hidden scroll-mt-32">
         {/* Background Gradients */}
         <div className="absolute top-0 right-0 w-[50vw] h-[50vw] bg-emerald-300/10 blur-[150px] rounded-full mix-blend-multiply animate-pulse"></div>
         <div className="absolute bottom-0 left-0 w-[50vw] h-[50vw] bg-slate-300/20 blur-[150px] rounded-full mix-blend-multiply"></div>
@@ -342,10 +390,10 @@ const App: React.FC = () => {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
               </span>
-              <span className="text-emerald-700 font-mono text-xs uppercase tracking-[0.4em] font-bold">Conciencia Biológica</span>
+              <span className="text-emerald-700 font-mono text-xs uppercase tracking-[0.2em] font-bold">Acompañamiento Emocional</span>
             </div>
             
-            <h1 className="flex flex-col text-slate-900 leading-[0.8] mb-12 select-none relative z-20">
+            <h1 className="flex flex-col text-slate-900 leading-[0.8] mb-12 select-none relative z-20 max-w-full break-words">
               <span className="font-heading font-black text-[15vw] lg:text-[8.5rem] tracking-tighter uppercase text-slate-900 mix-blend-darken relative">
                 TRANS
                 <span className="absolute -z-10 text-stroke-light text-slate-200 left-1 top-1 blur-[1px]">TRANS</span>
@@ -358,17 +406,17 @@ const App: React.FC = () => {
               </span>
             </h1>
             
-            <p className="text-xl text-slate-700 max-w-lg leading-relaxed mb-14 font-normal pl-6 border-l-4 border-emerald-500/30">
+            <p className="text-xl md:text-2xl font-light text-slate-600 max-w-lg leading-relaxed mb-14 pl-6 border-l-4 border-emerald-500/30">
               Acompañamiento profesional de vanguardia para descifrar el mensaje biológico de tus síntomas y recuperar tu paz emocional.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto">
               <button 
-                onClick={() => scrollToSection(Section.CONTACTO)}
-                className="bg-slate-900 text-white px-12 py-6 rounded-full text-sm font-black tracking-widest uppercase hover:bg-emerald-700 transition-all glow-emerald hover:-translate-y-1 relative overflow-hidden group shadow-2xl"
+                onClick={() => window.open(`https://wa.me/523331155895?text=${WHATSAPP_MESSAGE}`, '_blank')}
+                className="bg-slate-900 text-white px-12 py-6 rounded-full text-sm font-black tracking-widest uppercase hover:bg-emerald-900 transition-all duration-500 hover:-translate-y-1 relative overflow-hidden group shadow-[0_20px_50px_-10px_rgba(0,0,0,0.5)] hover:shadow-[0_25px_60px_-12px_rgba(6,78,59,0.6)]"
               >
                 <span className="relative z-10 flex items-center gap-2">Agendar Sesión <ArrowRight className="w-4 h-4" /></span>
-                <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-teal-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-800 to-slate-900 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               </button>
               <button 
                 onClick={() => scrollToSection(Section.DECODIFICADOR)}
@@ -394,7 +442,7 @@ const App: React.FC = () => {
               <div className="absolute inset-0 bg-gradient-to-b from-transparent to-slate-900/30 mix-blend-multiply z-10 pointer-events-none"></div>
               <img 
                 src="https://i.ibb.co/8yTTcFQ/Whats-App-Image-2025-12-01-at-16-26-55.jpg" 
-                alt="José Alberto Pérez Franco" 
+                alt="Pepe Pérez" 
                 className="h-full w-full object-cover object-top hover:scale-105 transition-transform duration-[1.5s]" 
               />
               
@@ -414,7 +462,7 @@ const App: React.FC = () => {
       {/* ABOUT SECTION - Clean & Editorial */}
       <motion.section 
         id={Section.SOBRE_MI} 
-        className="py-32 bg-white relative overflow-hidden"
+        className="py-32 md:py-48 bg-white relative overflow-hidden scroll-mt-32"
         initial={{ opacity: 0, y: 100 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
@@ -438,15 +486,15 @@ const App: React.FC = () => {
           </div>
           
           <div className="md:col-span-7">
-            <h2 className="text-6xl md:text-8xl font-heading font-bold text-slate-900 mb-8 leading-[0.9] tracking-tighter">
+            <h2 className="text-6xl md:text-8xl font-heading font-bold text-slate-900 mb-8 leading-[0.9] tracking-tighter break-words">
               Máster en <br/>
               <span className="font-serif-display italic text-emerald-700 font-normal text-5xl md:text-7xl">Bioneuroemoción®</span>
             </h2>
             
-            <div className="space-y-8 text-lg text-slate-700 font-normal leading-relaxed">
+            <div className="space-y-8 text-xl text-slate-700 font-light leading-8">
               <p>
                 <span className="text-7xl float-left mr-4 mt-[-15px] font-heading font-black text-emerald-800 opacity-20">M</span>
-                i nombre es <strong className="text-slate-900 font-bold">José Alberto Pérez Franco</strong>. Mi labor no es curarte, sino acompañarte a que tomes conciencia de "para qué" tu cuerpo ha generado un síntoma.
+                i nombre es <strong className="text-slate-900 font-bold">Pepe Pérez</strong>. Mi labor no es curarte, sino acompañarte a que tomes conciencia de "para qué" tu cuerpo ha generado un síntoma.
               </p>
               <p>
                 Certificado por el <strong className="text-slate-900 border-b-2 border-emerald-300 hover:bg-emerald-50 transition-colors">Enric Corbera Institute</strong>, utilizo una metodología de vanguardia que integra conocimientos de biología, psicología y epigenética conductual para desactivar programas inconscientes.
@@ -469,30 +517,45 @@ const App: React.FC = () => {
       </motion.section>
 
       {/* DECODER SECTION - Ultra Future UI */}
-      <section id={Section.DECODIFICADOR} className="py-32 bg-slate-950 text-white relative overflow-hidden" data-hover="true">
-        {/* Animated Background Grid */}
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05]"></div>
-        <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(rgba(16,185,129,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.03)_1px,transparent_1px)] bg-[size:50px_50px]"></div>
+      <section id={Section.DECODIFICADOR} className="relative py-32 md:py-48 bg-slate-950 text-white overflow-hidden min-h-[90vh] flex items-center justify-center scroll-mt-32" data-hover="true">
+        {/* Animated Background Layers - Precision Grid */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.03)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,black,transparent)] pointer-events-none"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_rgba(16,185,129,0.05),_transparent_70%)] animate-pulse" style={{ animationDuration: '8s' }}></div>
         
-        {/* Ambient Glows */}
+        {/* 3D Perspective Grid Floor */}
+        <div className="absolute bottom-0 left-0 right-0 h-[60vh] bg-[linear-gradient(to_bottom,transparent_0%,rgba(16,185,129,0.05)_100%)] transform perspective-[1000px] rotate-x-[60deg] origin-bottom pointer-events-none">
+          <div className="absolute inset-0 bg-[size:4rem_4rem] bg-[linear-gradient(to_right,rgba(16,185,129,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(16,185,129,0.05)_1px,transparent_1px)]" style={{ backgroundPosition: 'center' }}></div>
+        </div>
+
+        {/* Ambient Glow Orbs */}
         <div className="absolute top-[-20%] left-[30%] w-[600px] h-[600px] bg-emerald-600/10 rounded-full blur-[120px] animate-pulse"></div>
         <div className="absolute bottom-[-20%] right-[10%] w-[400px] h-[400px] bg-teal-600/10 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '2s' }}></div>
         
-        <div className="max-w-5xl mx-auto px-6 relative z-10">
+        <div className="max-w-6xl mx-auto px-6 relative z-20 w-full">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8 }}
+            variants={{
+              hidden: { opacity: 0 },
+              visible: { 
+                opacity: 1,
+                transition: { staggerChildren: 0.15 }
+              }
+            }}
             className="text-center mb-16"
           >
-            <div className="inline-flex items-center gap-2 py-2 px-4 rounded-full border border-emerald-500/30 bg-emerald-900/20 backdrop-blur-md mb-8 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
-              <ScanLine className="w-4 h-4 text-emerald-400 animate-pulse" />
-              <span className="text-emerald-400 text-xs font-bold tracking-widest uppercase">Bio-Scanner v2.0</span>
-            </div>
+            <motion.div 
+              variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+              className="inline-flex items-center gap-3 py-2 px-5 rounded-full border border-emerald-500/30 bg-emerald-950/50 backdrop-blur-md mb-8 shadow-[0_0_20px_rgba(16,185,129,0.2)]"
+            >
+              <ScanLine className="w-4 h-4 text-emerald-400 animate-spin-slow" />
+              <span className="text-emerald-400 text-xs font-bold tracking-[0.2em] uppercase">System Ready</span>
+            </motion.div>
             
             <motion.h2 
-              className="text-5xl md:text-7xl font-heading font-black mb-6 text-white tracking-tighter cursor-default relative inline-block"
+              variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
+              className="text-6xl md:text-8xl font-heading font-black mb-6 text-white tracking-tighter cursor-default relative inline-block break-words max-w-full"
               whileHover={{
                 textShadow: [
                   "0 0 10px rgba(16, 185, 129, 0.2)",
@@ -502,100 +565,179 @@ const App: React.FC = () => {
                 transition: { duration: 1.5, repeat: Infinity }
               }}
             >
-              DECODIFICADOR <span className="text-stroke-light font-serif-display italic font-light text-emerald-300">Emocional</span>
+              DECODIFICADOR <span className="text-stroke-light font-serif-display italic font-light text-emerald-300 block md:inline">Emocional</span>
             </motion.h2>
-            <p className="text-slate-400 text-xl max-w-2xl mx-auto font-light leading-relaxed">
-              El cuerpo es el teatro de la conciencia. Ingresa tu síntoma para revelar la lógica oculta detrás del dolor.
-            </p>
+            <motion.p 
+              variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+              className="text-slate-400 text-xl md:text-2xl font-light max-w-2xl mx-auto leading-relaxed"
+            >
+              INICIAR ESCANEO EMOCIONAL
+            </motion.p>
           </motion.div>
 
-          {/* Ultra Glass Card */}
-          <div className="bg-slate-900/40 backdrop-blur-3xl border border-white/10 p-8 md:p-16 rounded-[2rem] shadow-[0_0_100px_-20px_rgba(16,185,129,0.1)] relative overflow-hidden group hover:border-emerald-500/30 transition-colors duration-500">
-            {/* Laser Line Animation */}
-            <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-500 to-transparent opacity-0 group-hover:opacity-100 group-hover:top-full transition-all duration-[2s] ease-in-out"></div>
-            <div className="absolute top-0 left-0 h-full w-[1px] bg-gradient-to-b from-transparent via-emerald-500 to-transparent opacity-0 group-hover:opacity-100 group-hover:left-full transition-all duration-[2s] ease-in-out"></div>
-
-            {!decoderResult ? (
-              <div className="relative z-10 max-w-2xl mx-auto">
-                <div className="mb-12 text-center">
-                  <label className="block text-xs font-black uppercase tracking-[0.3em] text-emerald-500 mb-6">¿Qué síntoma te pesa hoy?</label>
-                  <div className="relative group">
-                    <input 
-                      type="text" 
-                      value={symptom}
-                      onChange={(e) => setSymptom(e.target.value)}
-                      placeholder="Ej. Migraña, Rodilla, Ansiedad..."
-                      className="w-full bg-slate-950/50 border-b-2 border-slate-700 rounded-none p-6 text-3xl text-center text-white placeholder-slate-700 focus:outline-none focus:border-emerald-500 transition-all font-heading font-bold uppercase tracking-tight"
-                    />
-                    <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-emerald-500 transition-all duration-500 group-hover:w-full"></div>
-                  </div>
-                </div>
-                
-                <button 
-                  onClick={handleDecode}
-                  disabled={isDecoding || !symptom}
-                  className={`w-full py-6 rounded-xl font-black text-lg uppercase tracking-widest transition-all relative overflow-hidden group/btn ${
-                    isDecoding ? 'bg-slate-800 cursor-wait text-slate-500' : 'bg-emerald-600 text-white hover:bg-emerald-500 glow-emerald'
-                  }`}
-                >
-                  <span className="relative z-10 flex items-center justify-center gap-3">
-                    {isDecoding ? <span className="animate-pulse">Procesando Datos Biológicos...</span> : <>Analizar Sentido Biológico <Sparkles className="w-5 h-5" /></>}
-                  </span>
-                </button>
-              </div>
-            ) : (
+          {/* HUD Interface & Card */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="relative mx-auto max-w-4xl"
+          >
+            {/* Holographic HUD Corner Brackets */}
+            <div className="absolute -top-6 -left-6 w-16 h-16 border-l-4 border-t-4 border-emerald-500/40 rounded-tl-sm opacity-80"></div>
+            <div className="absolute -top-6 -right-6 w-16 h-16 border-r-4 border-t-4 border-emerald-500/40 rounded-tr-sm opacity-80"></div>
+            <div className="absolute -bottom-6 -left-6 w-16 h-16 border-l-4 border-b-4 border-emerald-500/40 rounded-bl-sm opacity-80"></div>
+            <div className="absolute -bottom-6 -right-6 w-16 h-16 border-r-4 border-b-4 border-emerald-500/40 rounded-br-sm opacity-80"></div>
+            
+            <div className="bg-slate-900/40 backdrop-blur-2xl border border-white/10 rounded-[2rem] p-8 md:p-16 shadow-[0_0_80px_-20px_rgba(16,185,129,0.2)] hover:border-emerald-500/50 hover:shadow-[0_0_60px_-15px_rgba(16,185,129,0.2)] relative overflow-hidden group transition-all duration-500">
+              
+              {/* Continuous Scanner Beam */}
               <motion.div 
-                initial={{ opacity: 0, scale: 0.95, filter: 'blur(10px)' }}
-                animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-                className="relative z-10 text-center"
-              >
-                <div className="w-24 h-24 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-10 border border-emerald-500/30 shadow-[0_0_50px_rgba(16,185,129,0.2)] animate-pulse">
-                  <Brain className="w-12 h-12 text-emerald-400" />
-                </div>
-                
-                <h3 className="text-xs font-black uppercase tracking-[0.3em] text-emerald-500 mb-8">Análisis Completado</h3>
-                
-                <div className="mb-12 p-8 border border-emerald-500/20 bg-emerald-900/10 rounded-2xl text-left relative overflow-hidden">
-                   <div className="absolute top-0 right-0 p-2 opacity-20">
-                     <Activity className="w-24 h-24 text-emerald-500" />
-                   </div>
-                   <p className="text-xl md:text-3xl text-white font-serif-display italic leading-relaxed mb-8 relative z-10">
-                    "{decoderResult.split('\n\n')[0]}"
-                   </p>
-                   <p className="text-emerald-300 text-lg font-bold font-heading mb-8 relative z-10 pl-6 border-l-2 border-emerald-500">
-                     {decoderResult.split('\n\n')[1]}
-                   </p>
-                   {decoderResult.split('\n\n')[2] && (
-                     <p className="text-xs text-slate-500 uppercase tracking-widest pt-6 border-t border-white/5 font-bold">
-                       {decoderResult.split('\n\n')[2]}
-                     </p>
-                   )}
-                </div>
+                 className="absolute top-0 left-0 w-full h-[30%] bg-gradient-to-b from-transparent via-emerald-500/5 to-transparent pointer-events-none z-0"
+                 animate={{ top: ['-30%', '130%'] }}
+                 transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
+              />
 
-                <div className="flex flex-col md:flex-row gap-6 justify-center">
-                   <button 
-                    onClick={() => scrollToSection(Section.CONTACTO)}
-                    className="bg-emerald-500 text-slate-900 px-10 py-4 rounded-full font-black uppercase tracking-widest hover:bg-white transition-all glow-emerald hover:scale-105 hover:shadow-[0_0_40px_rgba(16,185,129,0.6)]"
+              <AnimatePresence mode="wait">
+                {!decoderResult ? (
+                  <motion.div 
+                    key="input-mode"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
+                    transition={{ duration: 0.5 }}
+                    className="relative z-10 max-w-2xl mx-auto"
                   >
-                    Sanar en Sesión
-                  </button>
-                  <button 
-                    onClick={() => { setDecoderResult(null); setSymptom(''); }}
-                    className="px-10 py-4 rounded-full border border-white/20 text-white hover:bg-white/10 transition-colors uppercase text-xs font-bold tracking-widest hover:border-emerald-500/50"
+                    <div className="mb-14 text-center">
+                      <div className="flex justify-center mb-10">
+                         <div className="px-4 py-1 border border-emerald-900/50 bg-emerald-950/30 text-emerald-600 font-mono text-[10px] tracking-[0.3em] uppercase">
+                            Input Required
+                         </div>
+                      </div>
+                      
+                      <div className="relative group">
+                        {/* High-Tech Input */}
+                        <input 
+                          type="text" 
+                          value={symptom}
+                          onChange={(e) => setSymptom(e.target.value)}
+                          placeholder="ESCRIBE TU EMOCIÓN..."
+                          className="w-full bg-transparent border-b-2 border-slate-800 p-6 text-3xl md:text-5xl text-center text-white placeholder-slate-700 focus:outline-none focus:border-emerald-400 transition-all duration-300 font-heading font-black uppercase tracking-tight relative z-10 caret-emerald-500"
+                        />
+                        {/* Glowing Underline Glow */}
+                        <div className="absolute bottom-0 left-1/2 w-0 h-[2px] bg-emerald-400 shadow-[0_0_30px_#34d399] transition-all duration-500 group-focus-within:w-full group-focus-within:left-0 transform"></div>
+                      </div>
+                    </div>
+                    
+                    <button 
+                      onClick={handleDecode}
+                      disabled={isDecoding || !symptom}
+                      className={`w-full py-8 rounded-xl font-black text-lg uppercase tracking-[0.2em] transition-all relative overflow-hidden group/btn border border-emerald-500/20 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.5)] ${
+                        isDecoding ? 'bg-slate-900 text-emerald-500/50 cursor-wait' : 'bg-emerald-900/20 text-white hover:bg-emerald-600 hover:border-emerald-400 hover:shadow-[0_0_40px_rgba(16,185,129,0.3)]'
+                      }`}
+                    >
+                      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10"></div>
+                      <span className="relative z-10 flex items-center justify-center gap-4">
+                        {isDecoding ? (
+                           <span className="flex items-center gap-3 font-mono text-sm">
+                              <span className="w-1.5 h-1.5 bg-emerald-500 rounded-sm animate-ping"></span>
+                              [ PROCESANDO DATOS ]
+                           </span>
+                        ) : (
+                           <>
+                             <ScanLine className="w-6 h-6" />
+                             ANALIZAR SENTIDO
+                           </>
+                        )}
+                      </span>
+                    </button>
+                  </motion.div>
+                ) : (
+                  <motion.div 
+                    key="result-mode"
+                    initial={{ opacity: 0, scale: 0.9, filter: 'blur(20px)' }}
+                    animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+                    className="relative z-10 text-center"
                   >
-                    Nueva Consulta
-                  </button>
-                </div>
-              </motion.div>
-            )}
-          </div>
+                    {/* Holographic Header */}
+                    <div className="flex flex-col items-center justify-center mb-10">
+                      <div className="w-24 h-24 relative mb-6">
+                         <div className="absolute inset-0 bg-emerald-500/20 rounded-full animate-ping blur-xl"></div>
+                         <div className="relative w-full h-full bg-slate-900 rounded-full flex items-center justify-center border-2 border-emerald-400/50 shadow-[0_0_30px_rgba(16,185,129,0.4)]">
+                            <Brain className="w-10 h-10 text-emerald-400" />
+                         </div>
+                      </div>
+                      
+                      <div className="inline-block px-6 py-2 rounded-sm border-x border-emerald-500/30 bg-emerald-900/20 backdrop-blur-md">
+                         <h3 className="text-xs font-black uppercase tracking-[0.25em] text-emerald-300">
+                           Análisis Completado
+                         </h3>
+                      </div>
+                    </div>
+                    
+                    {/* Data Display Card - Tech Slate Style */}
+                    <div className="mb-12 p-10 border border-slate-700 bg-slate-900/40 backdrop-blur-2xl rounded-2xl text-left relative overflow-hidden shadow-[0_0_50px_-10px_rgba(16,185,129,0.15)] hover:border-emerald-400/40 transition-colors">
+                       {/* Tech Decorations */}
+                       <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
+                         <Activity className="w-40 h-40 text-emerald-500" />
+                       </div>
+                       
+                       <div className="flex justify-between items-start mb-6">
+                          <h4 className="text-3xl md:text-5xl text-white font-heading font-black tracking-tight drop-shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+                            {decoderResult.title}
+                          </h4>
+                          {/* Fake Graph Bars */}
+                          <div className="hidden md:flex gap-1 items-end h-10">
+                             <div className="w-1 bg-emerald-500/30 h-[40%]"></div>
+                             <div className="w-1 bg-emerald-500/50 h-[70%]"></div>
+                             <div className="w-1 bg-emerald-500 h-[100%]"></div>
+                             <div className="w-1 bg-emerald-500/50 h-[60%]"></div>
+                          </div>
+                       </div>
+                       
+                       <div className="grid md:grid-cols-[1fr_auto] gap-8">
+                         <p className="text-slate-300 text-lg md:text-xl font-light leading-relaxed relative z-10 border-l-2 border-emerald-500 pl-6">
+                          {decoderResult.core}
+                         </p>
+                       </div>
+                       
+                       <div className="mt-8 bg-emerald-950/30 p-6 rounded-lg border-l-4 border-emerald-400 relative overflow-hidden">
+                         <div className="absolute inset-0 bg-emerald-400/5 animate-pulse"></div>
+                         <p className="text-emerald-300 text-xl md:text-2xl font-serif-display italic mb-0 relative z-10">
+                           "{decoderResult.hook}"
+                         </p>
+                       </div>
+                    </div>
+
+                    <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
+                       <button 
+                        onClick={() => window.open(decoderResult.whatsappUrl, '_blank')}
+                        className="w-full md:w-auto bg-[#25D366] text-white px-10 py-5 rounded-sm font-black uppercase tracking-widest hover:bg-emerald-500 transition-all glow-emerald hover:scale-105 hover:shadow-[0_0_50px_rgba(37,211,102,0.4)] flex items-center justify-center gap-3 group relative overflow-hidden clip-path-slant"
+                      >
+                        <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-12"></div>
+                        <MessageCircle className="w-5 h-5 fill-current" />
+                        <span>DESACTIVAR PROGRAMA EN WHATSAPP</span>
+                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      </button>
+                      <button 
+                        onClick={() => { setDecoderResult(null); setSymptom(''); }}
+                        className="px-10 py-4 text-slate-500 hover:text-white transition-colors uppercase text-xs font-bold tracking-widest border-b border-transparent hover:border-emerald-500"
+                      >
+                        [ NUEVA CONSULTA ]
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </motion.div>
         </div>
       </section>
 
       {/* METHODOLOGY SECTION */}
       <motion.section 
         id={Section.METODOLOGIA} 
-        className="py-40 max-w-[1400px] mx-auto px-6 bg-slate-50"
+        className="py-32 md:py-48 max-w-[1400px] mx-auto px-6 bg-slate-50 scroll-mt-32"
         initial={{ opacity: 0, y: 100 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
@@ -604,7 +746,7 @@ const App: React.FC = () => {
         <div className="flex flex-col md:flex-row justify-between items-end mb-24 border-b border-slate-200 pb-12">
           <div>
             <span className="text-emerald-600 font-mono text-xs uppercase tracking-[0.3em] font-bold">El Proceso</span>
-            <h2 className="text-6xl md:text-8xl font-heading font-black mt-4 text-slate-900 tracking-tighter">
+            <h2 className="text-5xl md:text-7xl lg:text-8xl font-heading font-black mt-4 text-slate-900 tracking-tighter break-words">
               Metodo<span className="text-stroke-heavy text-slate-900 hover:text-emerald-900 transition-colors">logía</span>
             </h2>
           </div>
@@ -623,7 +765,7 @@ const App: React.FC = () => {
               transition={{ duration: 0.6, delay: index * 0.2 }}
               whileHover={{ y: -15 }}
               data-hover="true"
-              className="bg-white p-12 rounded-[2.5rem] shadow-[0_20px_50px_-20px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_60px_-15px_rgba(16,185,129,0.15)] transition-all duration-500 group relative overflow-hidden border border-slate-100"
+              className="bg-white/80 backdrop-blur-2xl p-12 rounded-[2.5rem] border border-white/40 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] hover:shadow-[0_30px_60px_-12px_rgba(6,182,212,0.15)] hover:border-cyan-500/30 transition-all duration-500 group relative overflow-hidden"
             >
               <div className="absolute top-0 right-0 p-8 opacity-5 font-heading text-9xl font-black text-slate-900 group-hover:text-emerald-500 transition-colors">
                  0{index + 1}
@@ -635,10 +777,10 @@ const App: React.FC = () => {
                 </div>
               </div>
               
-              <h3 className="text-3xl font-heading font-bold mb-3 text-slate-900">{step.title}</h3>
-              <p className="text-emerald-600 font-serif-display italic text-xl mb-8">{step.subtitle}</p>
+              <h3 className="text-2xl md:text-3xl font-heading font-black mb-3 text-slate-900 tracking-tight">{step.title}</h3>
+              <p className="text-emerald-600 font-serif-display italic text-lg mb-8">{step.subtitle}</p>
               
-              <p className="text-slate-700 leading-relaxed font-normal text-lg">
+              <p className="text-base md:text-lg text-slate-600 font-light leading-relaxed">
                 {step.description}
               </p>
             </motion.div>
@@ -649,7 +791,7 @@ const App: React.FC = () => {
       {/* TESTIMONIALS SECTION */}
       <motion.section 
         id={Section.TESTIMONIOS}
-        className="py-32 bg-white relative overflow-hidden"
+        className="py-32 md:py-48 bg-white relative overflow-hidden scroll-mt-32"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, margin: "-100px" }}
@@ -668,17 +810,17 @@ const App: React.FC = () => {
             {TESTIMONIALS.map((t, i) => (
               <motion.div 
                 key={t.id}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.15, duration: 0.6 }}
-                className="bg-white p-10 rounded-3xl border border-slate-100 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_50px_-10px_rgba(16,185,129,0.1)] transition-all duration-300 group flex flex-col"
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ delay: i * 0.2, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                className="bg-white/60 backdrop-blur-xl p-10 rounded-3xl border border-white/50 hover:border-emerald-500/30 shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:shadow-[0_30px_60px_-12px_rgba(99,102,241,0.15)] transition-all duration-300 group flex flex-col hover:-translate-y-2"
               >
                 <div className="mb-8 text-emerald-500 opacity-20 group-hover:opacity-100 transition-opacity duration-300">
                   <Quote size={40} className="fill-current" />
                 </div>
                 
-                <p className="text-slate-700 text-lg font-normal leading-relaxed italic mb-8 flex-grow">
+                <p className="text-slate-800 text-2xl font-serif-display font-medium leading-relaxed italic mb-8 flex-grow">
                   "{t.quote}"
                 </p>
                 
@@ -687,7 +829,7 @@ const App: React.FC = () => {
                     <img src={t.image} alt={t.name} className="w-full h-full object-cover" />
                   </div>
                   <div>
-                    <h4 className="font-heading font-bold text-slate-900 text-lg leading-none">{t.name}</h4>
+                    <h4 className="font-heading font-bold text-slate-900 text-base tracking-wide leading-none mb-1">{t.name}</h4>
                     <span className="text-emerald-600 text-xs font-bold uppercase tracking-widest">{t.role}</span>
                   </div>
                 </div>
@@ -700,51 +842,60 @@ const App: React.FC = () => {
       {/* FOOTER SECTION */}
       <motion.footer 
         id={Section.CONTACTO} 
-        className="bg-slate-950 text-white pt-32 pb-16 rounded-t-[4rem] relative overflow-hidden mt-12 shadow-[0_-20px_60px_-20px_rgba(0,0,0,0.3)]"
+        className="relative bg-slate-950 text-white rounded-t-[2.5rem] md:rounded-t-[4rem] overflow-hidden mt-12 shadow-[0_-20px_60px_-20px_rgba(0,0,0,0.3)] scroll-mt-32"
         initial={{ opacity: 0, y: 100 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.8 }}
       >
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 pointer-events-none"></div>
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-[1px] bg-gradient-to-r from-transparent via-emerald-500 to-transparent opacity-50"></div>
+        {/* Header Image */}
+        <div className="w-full relative z-0">
+           <img 
+            src="https://i.ibb.co/1Yn4S0dp/Iconic-photo-blue-202512021416.jpg" 
+            alt="Iconic Vision" 
+            className="w-full h-auto md:h-[600px] object-cover object-top"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-slate-950"></div>
+        </div>
         
-        {/* Footer Glow */}
-        <div className="absolute bottom-[-200px] left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-emerald-600/20 blur-[150px] rounded-full"></div>
-        
-        <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-20 relative z-10">
+        <div className="max-w-7xl mx-auto px-6 py-16 md:py-24 grid md:grid-cols-2 gap-20 relative z-10">
           <div>
-            <div className="mb-12">
-              <span className="font-serif-display italic text-4xl text-emerald-500 opacity-80">José Alberto</span>
-              <h3 className="font-heading text-6xl md:text-7xl font-black tracking-tighter text-white mt-2 ultra-gradient-text">Pérez Franco</h3>
+            <div className="mb-12 relative group cursor-default">
+              {/* ULTRA PREMIUM FOOTER LOGO */}
+               <h3 className="font-heading text-[6rem] md:text-[9rem] font-black tracking-tighter text-transparent text-stroke-light leading-[0.8] select-none opacity-50 transition-opacity duration-500 group-hover:opacity-100">
+                 PEPE
+               </h3>
+               <span className="absolute top-[45%] left-12 md:left-24 font-serif-display italic text-5xl md:text-7xl text-emerald-500 font-light mix-blend-plus-lighter">
+                 Pérez
+               </span>
             </div>
             
-            <p className="text-slate-400 max-w-md mb-12 text-xl font-light leading-relaxed">
-              Tu biología responde a tu conciencia. Si cambias tu percepción, cambias tu realidad. Agenda tu sesión y comienza el cambio.
+            <p className="text-slate-300 max-w-md mb-12 text-2xl font-light leading-relaxed">
+              Si cambias tu percepción, cambias tu realidad. Agenda tu sesión y comienza el cambio.
             </p>
 
             {/* Social Icons */}
             <div className="flex gap-4">
-               <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group hover:bg-emerald-600 hover:border-emerald-500 transition-all duration-300">
-                 <Instagram className="w-6 h-6 text-slate-400 group-hover:text-white transition-colors" />
+               <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-white/10 border border-white/10 flex items-center justify-center group hover:bg-emerald-600 hover:border-emerald-500 transition-all duration-300 backdrop-blur-md">
+                 <Instagram className="w-6 h-6 text-slate-300 group-hover:text-white transition-colors" />
                </a>
-               <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group hover:bg-[#0077b5] hover:border-[#0077b5] transition-all duration-300">
-                 <Linkedin className="w-6 h-6 text-slate-400 group-hover:text-white transition-colors" />
+               <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-white/10 border border-white/10 flex items-center justify-center group hover:bg-[#0077b5] hover:border-[#0077b5] transition-all duration-300 backdrop-blur-md">
+                 <Linkedin className="w-6 h-6 text-slate-300 group-hover:text-white transition-colors" />
                </a>
             </div>
           </div>
 
-          <div className="bg-white/5 backdrop-blur-md p-12 rounded-[2.5rem] border border-white/10 hover:border-emerald-500/30 transition-colors shadow-2xl">
+          <div className="bg-slate-800/20 backdrop-blur-2xl p-12 rounded-[2.5rem] border border-white/10 hover:border-emerald-500/30 transition-colors shadow-[0_0_40px_-10px_rgba(6,182,212,0.1)] hover:shadow-[0_0_60px_-10px_rgba(6,182,212,0.2)]">
             <h4 className="text-3xl font-serif-display italic mb-10 text-emerald-400">Contacto Directo</h4>
-            <div className="space-y-8 text-slate-300 text-lg">
+            <div className="space-y-8 text-slate-200 text-lg">
               <a href="mailto:asesoria@pepeperez.mx" className="flex items-center gap-6 hover:text-white transition-colors group">
-                <div className="w-12 h-12 rounded-full bg-slate-900 flex items-center justify-center group-hover:bg-emerald-500 transition-colors border border-slate-700 group-hover:border-emerald-500">
+                <div className="w-12 h-12 rounded-full bg-slate-900/80 flex items-center justify-center group-hover:bg-emerald-500 transition-colors border border-slate-700 group-hover:border-emerald-500">
                   <span className="text-emerald-500 group-hover:text-white font-bold">@</span>
                 </div>
                 <span className="font-heading tracking-wide">asesoria@pepeperez.mx</span>
               </a>
               <p className="flex items-center gap-6">
-                 <div className="w-12 h-12 rounded-full bg-slate-900 flex items-center justify-center border border-slate-700">
+                 <div className="w-12 h-12 rounded-full bg-slate-900/80 flex items-center justify-center border border-slate-700">
                   <span className="text-emerald-500 font-bold">Ph</span>
                 </div>
                 <span className="font-heading tracking-wide">+52 333 115 5895</span>
@@ -773,8 +924,8 @@ const App: React.FC = () => {
           </div>
         </div>
         
-        <div className="max-w-7xl mx-auto px-6 mt-24 pt-8 border-t border-slate-900 flex flex-col md:flex-row justify-between text-xs text-slate-500 uppercase tracking-widest font-bold">
-          <p>© 2025 José Alberto Pérez Franco.</p>
+        <div className="max-w-7xl mx-auto px-6 mt-12 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between text-xs text-slate-400 uppercase tracking-widest font-bold pb-12">
+          <p>© 2025 Pepe Pérez.</p>
           <p>Bioneuroemoción® is a registered trademark.</p>
         </div>
       </motion.footer>
