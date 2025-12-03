@@ -8,13 +8,12 @@ import { motion } from 'framer-motion';
 
 const NeuralNodes = () => {
   const nodes = useMemo(() => {
-    // Reduced from 18 to 12 for better FPS on lower end devices
-    return Array.from({ length: 12 }).map((_, i) => ({
+    return Array.from({ length: 15 }).map((_, i) => ({
       id: i,
-      size: Math.random() * 8 + 2,
+      size: Math.random() * 8 + 3,
       x: Math.random() * 100,
       y: Math.random() * 100,
-      duration: Math.random() * 5 + 5,
+      duration: Math.random() * 3 + 4, // Faster duration
       delay: Math.random() * 2,
     }));
   }, []);
@@ -30,12 +29,11 @@ const NeuralNodes = () => {
             top: `${node.y}%`,
             width: node.size,
             height: node.size,
-            boxShadow: '0 0 20px rgba(16, 185, 129, 0.3)'
           }}
           animate={{
-            y: [0, -40, 0],
-            opacity: [0.1, 0.5, 0.1],
-            scale: [1, 1.3, 1]
+            y: [0, -60, 0],
+            opacity: [0.1, 0.6, 0.1],
+            scale: [1, 1.5, 1]
           }}
           transition={{
             duration: node.duration,
@@ -55,37 +53,38 @@ const FluidBackground: React.FC = () => {
       
       <NeuralNodes />
 
-      {/* Blob 1: Vibrant Emerald - Healing/Bio */}
-      {/* Reduced blur radius from 150px to 100px for fill-rate optimization */}
+      {/* Blob 1: Vibrant Emerald - Living Breath */}
       <motion.div
-        className="absolute top-[-20%] right-[-10%] w-[90vw] h-[90vw] bg-emerald-400/15 rounded-full mix-blend-multiply filter blur-[100px] opacity-70 will-change-transform"
+        className="absolute top-[-20%] right-[-10%] w-[90vw] h-[90vw] bg-emerald-400/20 rounded-full mix-blend-multiply filter blur-[90px] opacity-70 will-change-transform"
         animate={{
-          scale: [1, 1.1, 1],
-          x: [0, 50, 0],
+          scale: [1, 1.15, 0.95, 1],
+          x: [0, 60, -20, 0],
+          y: [0, 30, -30, 0],
         }}
         transition={{
-          duration: 25,
+          duration: 18, // Faster cycle
           repeat: Infinity,
-          ease: "easeInOut"
+          ease: "linear"
         }}
       />
 
       {/* Blob 2: Deep Teal/Cyan - Consciousness */}
       <motion.div
-        className="absolute bottom-[-10%] left-[-20%] w-[100vw] h-[100vw] bg-teal-500/10 rounded-full mix-blend-multiply filter blur-[100px] opacity-60 will-change-transform"
+        className="absolute bottom-[-10%] left-[-20%] w-[100vw] h-[100vw] bg-teal-500/15 rounded-full mix-blend-multiply filter blur-[90px] opacity-60 will-change-transform"
         animate={{
-          scale: [1, 1.2, 1],
-          y: [0, -50, 0],
+          scale: [1.1, 0.9, 1.1],
+          y: [0, -60, 0],
+          x: [0, -30, 30, 0],
         }}
         transition={{
-          duration: 30,
+          duration: 22,
           repeat: Infinity,
-          ease: "easeInOut"
+          ease: "linear"
         }}
       />
 
       {/* Subtle Grain for Texture */}
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.04] pointer-events-none mix-blend-overlay"></div>
+      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none mix-blend-overlay"></div>
     </div>
   );
 };
