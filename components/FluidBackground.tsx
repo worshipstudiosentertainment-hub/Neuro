@@ -8,7 +8,8 @@ import { motion } from 'framer-motion';
 
 const NeuralNodes = () => {
   const nodes = useMemo(() => {
-    return Array.from({ length: 18 }).map((_, i) => ({
+    // Reduced from 18 to 12 for better FPS on lower end devices
+    return Array.from({ length: 12 }).map((_, i) => ({
       id: i,
       size: Math.random() * 8 + 2,
       x: Math.random() * 100,
@@ -23,7 +24,7 @@ const NeuralNodes = () => {
       {nodes.map((node) => (
         <motion.div
           key={node.id}
-          className="absolute rounded-full bg-emerald-500/10 blur-[2px] will-change-[transform,opacity]"
+          className="absolute rounded-full bg-emerald-500/10 blur-[2px] will-change-transform"
           style={{
             left: `${node.x}%`,
             top: `${node.y}%`,
@@ -55,8 +56,9 @@ const FluidBackground: React.FC = () => {
       <NeuralNodes />
 
       {/* Blob 1: Vibrant Emerald - Healing/Bio */}
+      {/* Reduced blur radius from 150px to 100px for fill-rate optimization */}
       <motion.div
-        className="absolute top-[-20%] right-[-10%] w-[90vw] h-[90vw] bg-emerald-400/15 rounded-full mix-blend-multiply filter blur-[150px] opacity-70 will-change-transform"
+        className="absolute top-[-20%] right-[-10%] w-[90vw] h-[90vw] bg-emerald-400/15 rounded-full mix-blend-multiply filter blur-[100px] opacity-70 will-change-transform"
         animate={{
           scale: [1, 1.1, 1],
           x: [0, 50, 0],
@@ -70,7 +72,7 @@ const FluidBackground: React.FC = () => {
 
       {/* Blob 2: Deep Teal/Cyan - Consciousness */}
       <motion.div
-        className="absolute bottom-[-10%] left-[-20%] w-[100vw] h-[100vw] bg-teal-500/10 rounded-full mix-blend-multiply filter blur-[150px] opacity-60 will-change-transform"
+        className="absolute bottom-[-10%] left-[-20%] w-[100vw] h-[100vw] bg-teal-500/10 rounded-full mix-blend-multiply filter blur-[100px] opacity-60 will-change-transform"
         animate={{
           scale: [1, 1.2, 1],
           y: [0, -50, 0],

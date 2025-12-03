@@ -5,10 +5,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence, useSpring, useMotionValue } from 'framer-motion';
-import { Menu, X, Brain, Ear, Sparkles, MessageCircle, Activity, Dna, ScanLine, Atom, ArrowRight, Quote, Instagram, Linkedin, ArrowUp, Fingerprint } from 'lucide-react';
+import { Menu, X, Brain, Ear, Sparkles, MessageCircle, Activity, ScanLine, Atom, ArrowRight, Quote, Instagram, Linkedin, ArrowUp, Dna } from 'lucide-react';
 import FluidBackground from './components/FluidBackground';
 import AIChat from './components/AIChat';
-import CustomCursor from './components/CustomCursor';
 import { Section, MethodologyStep } from './types';
 
 // Methodology Data
@@ -66,6 +65,7 @@ const App: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   
   // Mobile Menu Parallax
   const menuMouseX = useMotionValue(0);
@@ -93,15 +93,29 @@ const App: React.FC = () => {
   const [isDecoding, setIsDecoding] = useState(false);
 
   useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    // Initial check
+    handleResize();
+    
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
       setShowScrollTop(window.scrollY > 300);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   const handleMenuMouseMove = (e: React.MouseEvent) => {
+    if (!isMobile) return; // Only relevant if interaction happens
     const { clientX, clientY } = e;
     const { innerWidth, innerHeight } = window;
     // Normalized coordinates -1 to 1
@@ -114,20 +128,17 @@ const App: React.FC = () => {
   const scrollToSection = (id: string) => {
     setMobileMenuOpen(false);
     
-    // Increased timeout to 50ms to ensure menu close animation allows proper reflow on mobile devices
-    setTimeout(() => {
-      const element = document.getElementById(id);
-      if (element) {
-        // Use getBoundingClientRect for absolute precision relative to current view
-        const elementPosition = element.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.scrollY - 100; // 100px offset for sticky header
+    const element = document.getElementById(id);
+    if (element) {
+      const offset = 120;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.scrollY - offset;
 
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        });
-      }
-    }, 50);
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
   };
 
   const handleDecode = () => {
@@ -207,16 +218,26 @@ const App: React.FC = () => {
 
   return (
     <div className="relative min-h-screen text-slate-900 selection:bg-emerald-500/30 selection:text-emerald-900 overflow-x-hidden font-sans">
-      <CustomCursor />
-      <FluidBackground />
+      
+      {/* HYBRID BACKGROUND ENGINE */}
+      {isMobile ? (
+        <div className="fixed inset-0 -z-10 bg-slate-50">
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/5 via-slate-900/5 to-emerald-900/5 animate-pulse-slow"></div>
+          {/* Subtle top light for depth */}
+          <div className="absolute top-0 left-0 right-0 h-[30vh] bg-gradient-to-b from-white to-transparent opacity-80"></div>
+        </div>
+      ) : (
+        <FluidBackground />
+      )}
+      
       <AIChat />
       
-      {/* WHATSAPP FAB - Floating Pulse */}
+      {/* WHATSAPP FAB - Floating Pulse - Corrected Z-Index */}
       <a 
         href="https://wa.me/523331155895" 
         target="_blank" 
         rel="noopener noreferrer"
-        className="fixed bottom-8 right-6 md:right-8 z-[70] bg-[#25D366] text-white p-4 rounded-full glow-emerald hover:scale-110 transition-all duration-300 flex items-center justify-center group"
+        className="fixed bottom-8 right-6 md:right-8 z-[50] bg-[#25D366] text-white p-4 rounded-full glow-emerald hover:scale-110 transition-all duration-300 flex items-center justify-center group"
       >
         <div className="absolute inset-0 rounded-full border border-[#25D366] animate-ping opacity-50"></div>
         <div className="absolute inset-0 rounded-full bg-white/20 animate-pulse"></div>
@@ -231,7 +252,7 @@ const App: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="fixed bottom-8 left-6 md:left-8 z-[70] bg-white/10 backdrop-blur-md border border-emerald-500/30 text-emerald-600 p-4 rounded-full glow-emerald hover:bg-emerald-500 hover:text-white transition-all duration-300 shadow-[0_0_20px_rgba(16,185,129,0.2)] group"
+            className="fixed bottom-8 left-6 md:left-8 z-[50] bg-white/10 backdrop-blur-md border border-emerald-500/30 text-emerald-600 p-4 rounded-full glow-emerald hover:bg-emerald-500 hover:text-white transition-all duration-300 shadow-[0_0_20px_rgba(16,185,129,0.2)] group"
           >
             <ArrowUp className="w-6 h-6 group-hover:animate-bounce" />
           </motion.button>
@@ -320,7 +341,7 @@ const App: React.FC = () => {
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay with Parallax */}
+      {/* Mobile Menu Overlay with Parallax & Z-Index Repair */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
@@ -328,19 +349,19 @@ const App: React.FC = () => {
             animate={{ opacity: 1, clipPath: "circle(150% at 100% 0)" }}
             exit={{ opacity: 0, clipPath: "circle(0% at 100% 0)" }}
             transition={{ type: "spring", damping: 25, stiffness: 100 }}
-            className="fixed inset-0 z-[90] bg-slate-50/95 backdrop-blur-3xl flex flex-col items-center justify-center gap-8 md:hidden overflow-hidden"
+            className="fixed inset-0 z-[100] bg-slate-950/98 backdrop-blur-xl flex flex-col items-center justify-center gap-8 md:hidden overflow-hidden"
             onMouseMove={handleMenuMouseMove}
           >
             {/* Parallax Background Layers */}
             <motion.div 
-              className="absolute top-[-20%] right-[-20%] w-[80vw] h-[80vw] bg-emerald-400/20 rounded-full blur-[100px] pointer-events-none mix-blend-multiply"
+              className="absolute top-[-20%] right-[-20%] w-[80vw] h-[80vw] bg-emerald-400/20 rounded-full blur-[100px] pointer-events-none mix-blend-plus-lighter"
               style={{
                 x: useTransform(menuMouseX, (val) => val * -20),
                 y: useTransform(menuMouseY, (val) => val * -20),
               }}
             />
              <motion.div 
-              className="absolute bottom-[-10%] left-[-10%] w-[60vw] h-[60vw] bg-teal-400/20 rounded-full blur-[80px] pointer-events-none mix-blend-multiply"
+              className="absolute bottom-[-10%] left-[-10%] w-[60vw] h-[60vw] bg-teal-400/20 rounded-full blur-[80px] pointer-events-none mix-blend-plus-lighter"
               style={{
                 x: useTransform(menuMouseX, (val) => val * -30),
                 y: useTransform(menuMouseY, (val) => val * -30),
@@ -367,7 +388,7 @@ const App: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.1, duration: 0.5, ease: "easeOut" }}
                   onClick={() => scrollToSection(item.id)}
-                  className="text-5xl font-heading font-bold text-slate-900 hover:text-emerald-600 transition-colors tracking-tighter"
+                  className="text-5xl font-heading font-bold text-white hover:text-emerald-400 transition-colors tracking-tighter"
                   whileHover={{ scale: 1.05, x: 10 }}
                 >
                   {item.label}
@@ -378,11 +399,15 @@ const App: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* HERO SECTION - TYPOGRAPHY MASTERPIECE */}
+      {/* HERO SECTION */}
       <header id={Section.HERO} className="relative min-h-screen flex items-center pt-24 pb-12 overflow-hidden scroll-mt-32">
         {/* Background Gradients */}
-        <div className="absolute top-0 right-0 w-[50vw] h-[50vw] bg-emerald-300/10 blur-[150px] rounded-full mix-blend-multiply animate-pulse"></div>
-        <div className="absolute bottom-0 left-0 w-[50vw] h-[50vw] bg-slate-300/20 blur-[150px] rounded-full mix-blend-multiply"></div>
+        {!isMobile && (
+          <>
+            <div className="absolute top-0 right-0 w-[50vw] h-[50vw] bg-emerald-300/10 blur-[150px] rounded-full mix-blend-multiply animate-pulse"></div>
+            <div className="absolute bottom-0 left-0 w-[50vw] h-[50vw] bg-slate-300/20 blur-[150px] rounded-full mix-blend-multiply"></div>
+          </>
+        )}
 
         <div className="max-w-[1400px] mx-auto w-full px-6 grid lg:grid-cols-2 gap-16 items-center relative z-10">
           
@@ -392,7 +417,7 @@ const App: React.FC = () => {
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
-            className="order-2 lg:order-1 flex flex-col items-start"
+            className="order-2 lg:order-1 flex flex-col items-start will-change-transform"
           >
             <div className="flex items-center gap-3 mb-8">
               <span className="flex h-3 w-3 relative">
@@ -442,7 +467,7 @@ const App: React.FC = () => {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.2, delay: 0.2 }}
-            className="order-1 lg:order-2 relative h-[60vh] lg:h-[85vh] w-full flex justify-end group"
+            className="order-1 lg:order-2 relative h-[60vh] lg:h-[85vh] w-full flex justify-end group will-change-transform"
           >
             {/* Abstract Elements behind image */}
             <div className="absolute top-10 right-10 w-[95%] h-[95%] border border-emerald-900/5 rounded-[0_100px_0_100px] z-0 transition-transform duration-700 group-hover:translate-x-4 group-hover:-translate-y-4"></div>
@@ -468,7 +493,7 @@ const App: React.FC = () => {
         </div>
       </header>
 
-      {/* ABOUT SECTION - Clean & Editorial */}
+      {/* ABOUT SECTION */}
       <motion.section 
         id={Section.SOBRE_MI} 
         className="py-32 md:py-48 bg-white relative overflow-hidden scroll-mt-32"
@@ -525,9 +550,9 @@ const App: React.FC = () => {
         </div>
       </motion.section>
 
-      {/* DECODER SECTION - Ultra Future UI */}
+      {/* DECODER SECTION */}
       <section id={Section.DECODIFICADOR} className="relative py-32 md:py-48 bg-slate-950 text-white overflow-hidden min-h-[90vh] flex items-center justify-center scroll-mt-32" data-hover="true">
-        {/* Animated Background Layers - Precision Grid */}
+        {/* Animated Background Layers */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.03)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,black,transparent)] pointer-events-none"></div>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_rgba(16,185,129,0.05),_transparent_70%)] animate-pulse" style={{ animationDuration: '8s' }}></div>
         
@@ -774,7 +799,7 @@ const App: React.FC = () => {
               transition={{ duration: 0.6, delay: index * 0.2 }}
               whileHover={{ y: -15 }}
               data-hover="true"
-              className="bg-white/80 backdrop-blur-2xl p-12 rounded-[2.5rem] border border-white/40 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] hover:shadow-[0_30px_60px_-12px_rgba(6,182,212,0.15)] hover:border-cyan-500/30 transition-all duration-500 group relative overflow-hidden"
+              className="bg-white/60 backdrop-blur-2xl p-12 rounded-[2.5rem] border border-white/40 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] hover:shadow-[0_30px_60px_-12px_rgba(6,182,212,0.15)] hover:border-cyan-500/30 transition-all duration-500 group relative overflow-hidden"
             >
               <div className="absolute top-0 right-0 p-8 opacity-5 font-heading text-9xl font-black text-slate-900 group-hover:text-emerald-500 transition-colors">
                  0{index + 1}
