@@ -7,7 +7,6 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence, useSpring } from 'framer-motion';
 import { Menu, X, Brain, Sparkles, MessageCircle, Activity, Atom, ArrowRight, Quote, Instagram, Linkedin, ArrowUp, Lock, Zap, CheckCircle2, ShieldCheck, Award, Users, Verified } from 'lucide-react';
 import FluidBackground from './components/FluidBackground';
-import AIChat from './components/AIChat';
 import { Section, MethodologyStep } from './types';
 
 // Methodology Data - REFACTORED FOR NEUROMARKETING (Reptilian Brain: Safety, Power, Freedom)
@@ -33,7 +32,7 @@ const METHODOLOGY: MethodologyStep[] = [
     iconName: 'Sparkles',
     description: 'No solo solucionas un problema; actualizas tu identidad. Pasas de ser víctima de las circunstancias a ser el creador consciente de tu realidad.'
   },
-];
+  ];
 
 // Testimonials Data
 const TESTIMONIALS = [
@@ -253,8 +252,6 @@ const App: React.FC = () => {
       ) : (
         <FluidBackground />
       )}
-      
-      <AIChat />
       
       {/* WHATSAPP FAB - High Velocity Pulse */}
       <motion.a 
