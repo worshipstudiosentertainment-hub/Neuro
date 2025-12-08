@@ -7,6 +7,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence, useSpring } from 'framer-motion';
 import { Menu, X, Brain, Sparkles, MessageCircle, Activity, Atom, ArrowRight, Quote, Instagram, Linkedin, ArrowUp, Lock, Zap, CheckCircle2, ShieldCheck, Award, Users, Verified } from 'lucide-react';
 import FluidBackground from './components/FluidBackground';
+import DynamicArt from './components/DynamicArt';
 import { Section, MethodologyStep } from './types';
 
 // Methodology Data - REFACTORED FOR NEUROMARKETING (Reptilian Brain: Safety, Power, Freedom)
@@ -14,23 +15,23 @@ const METHODOLOGY: MethodologyStep[] = [
   { 
     id: '1', 
     title: 'Desactivación del Miedo', 
-    subtitle: 'Seguridad Inmediata',
+    subtitle: 'Protocolo de Seguridad',
     iconName: 'Ear',
-    description: 'Tu cerebro no puede sanar si está en alerta. Creamos un entorno blindado para apagar tus alarmas inconscientes y recuperar tu centro.'
+    description: 'El cerebro no negocia soluciones en estado de alerta. Blindamos tu entorno emocional para apagar los mecanismos de defensa y acceder al núcleo del conflicto.'
   },
   { 
     id: '2', 
     title: 'Claridad Radical', 
-    subtitle: 'El "Para Qué" Oculto',
+    subtitle: 'Lógica Biológica',
     iconName: 'Brain',
-    description: 'Dejamos de buscar "culpables" y encontramos la lógica biológica. Entender el origen real de tu conflicto disuelve la incertidumbre al instante.'
+    description: 'Abandonamos la victimización para encontrar la función biológica del síntoma. Entender el "para qué" profundo disuelve la incertidumbre al instante.'
   },
   { 
     id: '3', 
-    title: 'Recuperación de Poder', 
-    subtitle: 'Nueva Identidad',
+    title: 'Soberanía Emocional', 
+    subtitle: 'Re-Codificación',
     iconName: 'Sparkles',
-    description: 'No solo solucionas un problema; actualizas tu identidad. Pasas de ser víctima de las circunstancias a ser el creador consciente de tu realidad.'
+    description: 'No solo resolvemos el síntoma; actualizamos tu identidad. Dejas de ser un resultado de tu pasado para convertirte en el arquitecto de tu futuro.'
   },
   ];
 
@@ -38,11 +39,11 @@ const METHODOLOGY: MethodologyStep[] = [
 const TESTIMONIALS = [
   {
     id: 1,
-    name: "J.P. Rojo",
-    role: "Empresario",
-    image: "https://i.ibb.co/7JBhKpFx/Whats-App-Image-2025-11-19-at-15-29-30.jpg",
-    quote: "Pepe me mostró el ángulo preciso para ver lo que me inquietaba desde otra perspectiva. Transformé ese conflicto en nuevas herramientas.",
-    impact: "Claridad & Estrategia"
+    name: "Rodrigo Vargas",
+    role: "Personal Trainer",
+    image: "https://i.ibb.co/p65k6CYf/Whats-App-Image-2025-12-05-at-20-51-42.jpg",
+    quote: "No es la típica terapia donde solo hablas. Es una experiencia diferente que no te esperas. Pepe me hizo darme cuenta de patrones inconscientes y entender su origen real. Recomendado ampliamente si buscas mejorar tu vida.",
+    impact: "Consciencia Inmediata"
   },
   {
     id: 2,
@@ -54,11 +55,19 @@ const TESTIMONIALS = [
   },
   {
     id: 3,
-    name: "Roberto Almazán",
-    role: "Arquitecto",
-    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=400&h=400",
-    quote: "Escéptico al principio, pero la claridad mental que obtuve fue inmediata. Entender mis proyecciones me devolvió la tranquilidad.",
-    impact: "Paz Mental"
+    name: "Martha Parra",
+    role: "Diseñadora Gráfica",
+    image: "https://i.ibb.co/gsxHGRx/Whats-App-Image-2025-12-05-at-22-40-05.jpg",
+    quote: "Pasé por un duelo largo y a pesar de haber tomado terapia aún entraba en depresión constantemente, finalmente Pepe me ayudó a abrazar mi dolor, aprender de él y dejarlo ir. Hoy me siento plena y estoy muy agradecida.",
+    impact: "Plenitud Interior"
+  },
+  {
+      id: 4,
+      name: "J.P. Rojo",
+      role: "Empresario",
+      image: "https://i.ibb.co/7JBhKpFx/Whats-App-Image-2025-11-19-at-15-29-30.jpg",
+      quote: "Pepe creó el ángulo correcto para ver lo que antes me dolía. Con esa nueva perspectiva, transformé el conflicto en herramientas para mejorar mi vida. Poco a poco, trabajo para expandir esta nueva visión.",
+      impact: "Visión Expandida"
   }
 ];
 
@@ -299,10 +308,10 @@ const App: React.FC = () => {
 
         <div className="max-w-[1400px] mx-auto px-6 h-full flex items-center justify-between">
           {/* LOGO LOCKUP - Ultra-Premium Typography */}
-          <div className="flex items-center gap-4 group cursor-pointer" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
+          <div className="flex items-center gap-5 group cursor-pointer" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
             
-            {/* ANIMATED BIO-NODE ICON LOGO */}
-            <div className={`relative w-12 h-12 flex items-center justify-center transition-all duration-500 ${isScrolled ? 'scale-75' : 'scale-100'}`}>
+            {/* ANIMATED BIO-NODE ICON LOGO - Increased Size */}
+            <div className={`relative flex items-center justify-center transition-all duration-500 ${isScrolled ? 'w-10 h-10 scale-90' : 'w-14 h-14 scale-100'}`}>
                {/* Ambient Glow */}
                <div className="absolute inset-0 bg-emerald-500/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
@@ -325,7 +334,7 @@ const App: React.FC = () => {
                  className="relative z-10 text-slate-900 group-hover:text-emerald-700 transition-colors duration-500"
                  whileHover={{ scale: 1.1 }}
                >
-                 <Atom className="w-6 h-6" strokeWidth={2} />
+                 <Atom className={`${isScrolled ? 'w-5 h-5' : 'w-7 h-7'}`} strokeWidth={2} />
                </motion.div>
 
                {/* Central Bio-Heartbeat */}
@@ -345,20 +354,20 @@ const App: React.FC = () => {
                </motion.div>
             </div>
             
-            <div className="flex flex-col justify-center relative h-10 w-auto min-w-[140px]">
-              <div className={`absolute left-0 transition-all duration-500 ${isScrolled ? 'top-1' : 'top-0'}`}>
-                  <span className={`font-heading font-extrabold leading-none tracking-[-0.1em] block transition-all duration-500 ${isScrolled ? 'text-2xl' : 'text-4xl'} text-slate-900`}>
+            <div className={`flex flex-col justify-center relative h-auto transition-all duration-500 ${isScrolled ? 'min-w-[120px]' : 'min-w-[180px]'}`}>
+              <div className={`absolute left-0 transition-all duration-500 ${isScrolled ? 'top-1' : '-top-1'}`}>
+                  <span className={`font-heading font-extrabold leading-none tracking-[-0.1em] block transition-all duration-500 text-emerald-600 ${isScrolled ? 'text-3xl' : 'text-5xl'} drop-shadow-sm`}>
                     PEPE
                   </span>
               </div>
-              <div className={`absolute left-0 transition-all duration-500 z-10 ${isScrolled ? 'top-4 left-8' : 'top-5 left-12'}`}>
-                  <span className={`font-serif-display italic font-medium leading-none text-emerald-500 block transition-all duration-500 ${isScrolled ? 'text-xl' : 'text-3xl'} drop-shadow-[0_2px_10px_rgba(16,185,129,0.3)] mix-blend-multiply`}>
+              <div className={`absolute left-0 transition-all duration-500 z-10 ${isScrolled ? 'top-5 left-10' : 'top-6 left-12 md:left-14'}`}>
+                  <span className={`font-serif-display italic font-medium leading-none text-emerald-600 block transition-all duration-500 ${isScrolled ? 'text-2xl' : 'text-4xl'} drop-shadow-[0_0_20px_rgba(16,185,129,0.4)]`}>
                     Pérez<span className="text-emerald-400 drop-shadow-[0_0_12px_rgba(52,211,153,1)] animate-pulse">.</span>
                   </span>
               </div>
             </div>
             {/* Private Practice Badge */}
-            <div className={`hidden md:block border-l border-slate-300 pl-4 ml-4 transition-opacity duration-300 ${isScrolled ? 'opacity-0' : 'opacity-100'}`}>
+            <div className={`hidden lg:block border-l border-slate-300 pl-4 ml-2 transition-opacity duration-300 ${isScrolled ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'}`}>
               <div className="flex flex-col gap-[2px]">
                 <span className="text-[10px] uppercase tracking-[0.25em] text-slate-400 font-bold leading-none">Private</span>
                 <span className="text-[10px] uppercase tracking-[0.25em] text-slate-400 font-bold leading-none">Practice</span>
@@ -466,8 +475,8 @@ const App: React.FC = () => {
           
           {/* Status Beacon */}
           <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.8 }}
             className="flex items-center gap-3 mb-8 lg:mb-12"
           >
@@ -486,7 +495,7 @@ const App: React.FC = () => {
               initial={{ y: 100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-              className="font-heading font-black text-[13vw] lg:text-[5.5rem] xl:text-[7rem] tracking-[-0.08em] uppercase text-slate-900 mix-blend-darken"
+              className="font-heading font-black text-[13vw] lg:text-[5.5rem] xl:text-[7rem] tracking-[-0.08em] uppercase text-slate-900 mix-blend-darken text-glow-dark"
             >
               TRANS
             </motion.span>
@@ -495,7 +504,7 @@ const App: React.FC = () => {
               initial={{ x: -50, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.2, duration: 1, ease: [0.16, 1, 0.3, 1] }}
-              className="font-heading font-black text-[13vw] lg:text-[5.5rem] xl:text-[7rem] tracking-[-0.08em] uppercase text-stroke-heavy hover:text-stroke-emerald cursor-default -mt-2 lg:-mt-4 ml-2"
+              className="font-heading font-black text-[13vw] lg:text-[5.5rem] xl:text-[7rem] tracking-[-0.08em] uppercase text-slate-900 hover:text-emerald-700 cursor-default -mt-2 lg:-mt-4 ml-2 text-glow-dark transition-colors"
             >
               FORMAR
             </motion.span>
@@ -504,9 +513,9 @@ const App: React.FC = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.8, duration: 1.5 }}
-              className="font-serif-display italic font-light text-[2.5rem] lg:text-[3.5rem] text-emerald-600 leading-none -mt-2 lg:-mt-3 ml-1"
+              className="font-serif-display italic font-light text-[2.5rem] lg:text-[3.5rem] text-emerald-600 leading-none -mt-2 lg:-mt-3 ml-1 text-glow"
             >
-              tu percepción.
+              tu realidad.
             </motion.span>
           </h1>
 
@@ -514,9 +523,9 @@ const App: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1, duration: 1 }}
-            className="text-lg md:text-xl font-light text-slate-600 max-w-md leading-relaxed mb-12 border-l-2 border-emerald-500/50 pl-6"
+            className="text-xl md:text-2xl font-light text-slate-600 max-w-md leading-relaxed mb-12 border-l-2 border-emerald-500/50 pl-6"
           >
-            Tu paz comienza cuando cambia tu forma de ver el mundo. Acompañamiento profesional en Bioneuroemoción® para gestionar conflictos y recuperar tu bienestar.
+            Tu paz comienza cuando cambia tu forma de ver el mundo. Acompañamiento de Alto Nivel en Bioneuroemoción® para desactivar conflictos y recuperar tu paz.
           </motion.p>
 
           {/* Magnetic CTAs */}
@@ -597,7 +606,7 @@ const App: React.FC = () => {
 
                    {/* Main Title */}
                    <div className="relative">
-                      <h3 className="font-heading font-black text-3xl text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 tracking-tight leading-none">
+                      <h3 className="font-heading font-black text-3xl text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 tracking-tight leading-none text-glow-white">
                         MASTER
                       </h3>
                       <p className="font-serif-display italic text-emerald-400 text-lg">en Bioneuroemoción®</p>
@@ -634,7 +643,26 @@ const App: React.FC = () => {
         viewport={{ once: true, margin: "-10%" }}
       >
         <div className="max-w-[1200px] mx-auto px-6 grid md:grid-cols-12 gap-20 items-center">
-          <div className="md:col-span-5 relative group">
+          
+          {/* TEXT BLOCK - MOVED ABOVE IMAGE FOR MOBILE */}
+          <div className="md:col-span-7 order-1 md:order-1">
+            <h2 className="text-5xl md:text-7xl font-heading font-black text-slate-900 mb-8 leading-[0.9] tracking-tighter text-glow-dark">
+              Consultor en <br/>
+              <span className="font-serif-display italic text-emerald-600 font-normal text-glow">Bioneuroemoción®</span>
+            </h2>
+            
+            <div className="space-y-6 text-xl text-slate-600 font-light leading-relaxed">
+              <p>
+                Soy <strong className="text-slate-900 font-bold">Pepe Pérez</strong>. No soy tu salvador, soy el espejo donde tu inconsciente se revela para ser sanado. Mi labor es acompañarte a desactivar los programas ocultos que sabotean tu paz.
+              </p>
+              <p>
+                A través de un proceso de indagación quirúrgica, transformamos el "por qué me pasa esto" en un "para qué lo estoy creando", devolviéndote el poder absoluto sobre tu vida.
+              </p>
+            </div>
+          </div>
+
+          {/* IMAGE BLOCK - MOVED BELOW TEXT FOR MOBILE */}
+          <div className="md:col-span-5 relative group order-2 md:order-2">
              <div className="absolute -inset-4 border border-emerald-100 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
              <div className="relative aspect-[3/4] bg-slate-100 overflow-hidden shadow-2xl rounded-sm">
                <img 
@@ -645,7 +673,7 @@ const App: React.FC = () => {
               {/* Quote Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent flex items-end p-8">
                 <div>
-                   <p className="font-serif-display italic text-2xl md:text-2xl text-white leading-snug mb-4 drop-shadow-lg">
+                   <p className="font-serif-display italic text-2xl md:text-3xl text-white leading-snug mb-4 drop-shadow-lg text-glow-white">
                     "Todo lo que nos irrita de los demás nos puede llevar a un entendimiento de nosotros mismos."
                    </p>
                    <div className="flex items-center gap-3">
@@ -657,21 +685,6 @@ const App: React.FC = () => {
             </div>
           </div>
           
-          <div className="md:col-span-7">
-            <h2 className="text-4xl md:text-5xl lg:text-7xl font-heading font-bold text-slate-900 mb-8 leading-[0.9] tracking-tight">
-              Consultor en <br/>
-              <span className="font-serif-display italic text-emerald-600 font-normal">Bioneuroemoción®</span>
-            </h2>
-            
-            <div className="space-y-6 text-xl text-slate-600 font-light leading-relaxed">
-              <p>
-                Mi nombre es <strong className="text-slate-900 font-bold">Pepe Pérez</strong>. Mi labor es acompañarte a explorar tu universo emocional para que tomes conciencia de "para qué" estás viviendo tus conflictos actuales.
-              </p>
-              <p>
-                Facilito un proceso de autoindagación que te permite cambiar la percepción de lo que vives, pasando del estrés a la coherencia emocional.
-              </p>
-            </div>
-          </div>
         </div>
       </motion.section>
 
@@ -693,10 +706,10 @@ const App: React.FC = () => {
               <span className="text-emerald-400 text-[10px] font-bold tracking-[0.3em] uppercase">Interactive Tool</span>
             </div>
             
-            <h2 className="text-5xl md:text-8xl font-heading font-black mb-6 text-white tracking-tighter">
-              ESPEJO <span className="font-serif-display italic font-light text-emerald-500">Emocional</span>
+            <h2 className="text-5xl md:text-8xl font-heading font-black mb-6 text-white tracking-tighter text-glow-white">
+              ESPEJO <span className="font-serif-display italic font-light text-emerald-500 text-glow">Emocional</span>
             </h2>
-            <p className="text-slate-400 text-xl font-light max-w-xl mx-auto">
+            <p className="text-slate-400 text-lg md:text-xl font-light max-w-xl mx-auto">
               ¿Qué situación o emoción te quita la paz hoy? Escríbela y descubre su sentido.
             </p>
           </motion.div>
@@ -791,11 +804,18 @@ const App: React.FC = () => {
       {/* METHODOLOGY SECTION - ENHANCED BLUEPRINT DESIGN - FASTER PHYSICS */}
       <motion.section 
         id={Section.METODOLOGIA} 
-        className="py-40 max-w-[1400px] mx-auto px-6 relative bg-slate-50"
+        className="py-40 max-w-[1400px] mx-auto px-6 relative bg-slate-50 min-h-screen flex flex-col justify-center"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, margin: "-10%" }} // Triggers slightly earlier for smoother flow
       >
+        {/* Dynamic Art Background - The Nano Banana Pro Infusion */}
+        <DynamicArt 
+          prompt="Abstract hyper-realistic 8k render of a human brain synapse turning into golden geometric light structures, dark elegant emerald background, macro photography style, cinematic lighting"
+          className="opacity-40 mix-blend-multiply"
+          overlayColor="bg-slate-50/90"
+        />
+
         {/* Connecting Line (Desktop) */}
         <div className="absolute top-[60%] left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-200 to-transparent hidden md:block z-0 opacity-40"></div>
 
@@ -805,12 +825,12 @@ const App: React.FC = () => {
               <span className="h-[1px] w-12 bg-emerald-500"></span>
               <span className="text-emerald-600 font-mono text-[10px] uppercase tracking-[0.4em] font-bold">Blueprint</span>
             </div>
-            <h2 className="text-6xl md:text-9xl font-heading font-black text-slate-900 tracking-tighter leading-[0.8]">
+            <h2 className="text-6xl md:text-9xl font-heading font-black text-slate-900 tracking-tighter leading-[0.8] text-glow-dark">
               METODO <br/>
-              <span className="text-transparent text-stroke-heavy hover:text-stroke-emerald transition-colors duration-500">LOGÍA</span>
+              <span className="text-transparent text-stroke-heavy hover:text-stroke-emerald transition-colors duration-500 text-glow">LOGÍA</span>
             </h2>
           </div>
-          <p className="max-w-md text-right text-slate-500 font-light text-lg mt-8 md:mt-0 leading-relaxed">
+          <p className="max-w-md text-right text-slate-500 font-light text-lg mt-8 md:mt-0 leading-relaxed bg-white/50 backdrop-blur-sm p-4 rounded-xl border border-white/50">
             Un sistema de 3 fases diseñado para desmantelar el conflicto biológico y reconstruir la coherencia emocional.
           </p>
         </div>
@@ -824,7 +844,7 @@ const App: React.FC = () => {
               viewport={{ once: true, margin: "-10%" }} // Snappy trigger
               transition={{ delay: index * 0.1, duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }} // Spring-like fast ease
               whileHover={{ y: -10 }}
-              className="relative bg-white/60 backdrop-blur-xl p-10 rounded-[2.5rem] border border-white shadow-[0_20px_40px_-10px_rgba(0,0,0,0.05)] hover:shadow-[0_40px_80px_-20px_rgba(16,185,129,0.15)] group overflow-hidden transition-all duration-700"
+              className="relative bg-white/80 backdrop-blur-xl p-10 rounded-[2.5rem] border border-white shadow-[0_20px_40px_-10px_rgba(0,0,0,0.05)] hover:shadow-[0_40px_80px_-20px_rgba(16,185,129,0.15)] group overflow-hidden transition-all duration-700"
             >
               {/* Hover Gradient Border Effect */}
               <div className="absolute inset-0 border-2 border-transparent group-hover:border-emerald-500/20 rounded-[2.5rem] transition-colors duration-700 pointer-events-none"></div>
@@ -844,7 +864,7 @@ const App: React.FC = () => {
               <div className="relative z-10">
                 <h3 className="text-3xl font-heading font-black mb-2 text-slate-900 group-hover:text-emerald-900 transition-colors">{step.title}</h3>
                 <p className="font-serif-display italic text-emerald-600 text-lg mb-6 group-hover:text-emerald-500 transition-colors">{step.subtitle}</p>
-                <p className="text-slate-600 font-light leading-relaxed">{step.description}</p>
+                <p className="text-lg text-slate-600 font-light leading-relaxed">{step.description}</p>
               </div>
 
               {/* Bottom Active Line */}
@@ -868,9 +888,9 @@ const App: React.FC = () => {
                   <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
                   Social Proof
                 </span>
-                <h2 className="text-6xl md:text-9xl font-heading font-black mt-4 text-white tracking-tighter leading-[0.85]">
+                <h2 className="text-6xl md:text-9xl font-heading font-black mt-4 text-white tracking-tighter leading-[0.85] text-glow-white">
                   EVIDENCIA <br/>
-                  <span className="text-transparent text-stroke-light opacity-30">REAL</span>
+                  <span className="text-transparent text-stroke-light opacity-30 text-glow">REAL</span>
                 </h2>
              </div>
              <p className="text-slate-400 max-w-sm text-lg font-light leading-relaxed text-right md:text-left">
@@ -945,28 +965,25 @@ const App: React.FC = () => {
 
         <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-20 -mt-20 relative z-10">
           <div>
-            <div className="mb-12 relative select-none group cursor-default inline-block">
-               <h3 className="font-heading text-[6rem] md:text-[12rem] font-black tracking-[-0.08em] text-transparent text-stroke-light leading-[0.7] opacity-25 group-hover:opacity-40 transition-opacity duration-700 relative z-0">
+            <div className="mb-12 relative select-none group cursor-default block">
+               {/* REDESIGNED LOGO: SOLID, GLOWING, HIGH CONTRAST */}
+               <h3 className="font-heading text-[6rem] md:text-[9rem] lg:text-[11rem] font-black tracking-[-0.05em] text-white leading-[0.8] drop-shadow-[0_0_25px_rgba(255,255,255,0.4)] text-glow-white">
                  PEPE
                </h3>
-               
-               <div className="absolute top-[40%] left-10 md:left-32 z-10 transform group-hover:-translate-y-4 transition-transform duration-700 ease-out mix-blend-screen">
-                 <span className="font-serif-display italic text-5xl md:text-[7rem] text-emerald-500 drop-shadow-[0_0_30px_rgba(16,185,129,0.4)] relative block">
-                   Pérez
-                   <span className="absolute -right-6 bottom-6 w-3 h-3 md:w-6 md:h-6 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_30px_#34d399]"></span>
-                 </span>
-               </div>
+               <h3 className="font-serif-display italic text-[4rem] md:text-[6rem] lg:text-[7rem] text-emerald-500 leading-[0.8] ml-2 md:ml-4 -mt-2 md:-mt-4 drop-shadow-[0_0_30px_rgba(16,185,129,0.8)] text-glow">
+                 Pérez<span className="text-white">.</span>
+               </h3>
             </div>
             
-            <p className="text-slate-400 max-w-sm mb-12 text-xl font-light">
+            <p className="text-slate-300 max-w-sm mb-12 text-xl font-light leading-relaxed">
               Si cambias tu percepción, cambias tu realidad. Agenda tu sesión y comienza el cambio.
             </p>
 
             <div className="flex gap-4">
-               <a href="#" aria-label="Instagram" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-emerald-600 hover:border-emerald-600 transition-all">
+               <a href="#" aria-label="Instagram" className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center hover:bg-emerald-600 hover:border-emerald-600 hover:text-white hover:shadow-[0_0_20px_rgba(16,185,129,0.6)] transition-all text-slate-400">
                  <Instagram className="w-5 h-5" />
                </a>
-               <a href="#" aria-label="LinkedIn" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-[#0077b5] hover:border-[#0077b5] transition-all">
+               <a href="#" aria-label="LinkedIn" className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center hover:bg-[#0077b5] hover:border-[#0077b5] hover:text-white hover:shadow-[0_0_20px_rgba(0,119,181,0.6)] transition-all text-slate-400">
                  <Linkedin className="w-5 h-5" />
                </a>
             </div>
@@ -990,22 +1007,28 @@ const App: React.FC = () => {
                 </div>
               </div>
               
-              <div className="space-y-6 text-slate-300 relative">
-                {/* Line Connector */}
-                <div className="absolute left-5 top-4 bottom-4 w-[1px] bg-gradient-to-b from-white/20 to-transparent"></div>
+              <div className="space-y-6 text-slate-300 relative pl-2">
+                {/* Circuit Line */}
+                <div className="absolute left-[1.9rem] top-6 bottom-6 w-[1px] bg-gradient-to-b from-emerald-500/30 to-transparent"></div>
                 
-                <a href="mailto:asesoria@pepeperez.mx" className="flex items-center gap-6 group/link hover:text-white transition-colors relative">
-                  <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center border border-white/10 group-hover/link:border-emerald-500 group-hover/link:bg-emerald-500/20 transition-all z-10">
-                     <span className="text-xs font-bold">@</span>
+                <a href="mailto:asesoria@pepeperez.mx" className="flex items-center gap-6 group/link relative z-10">
+                  <div className="relative w-14 h-14 rounded-full bg-slate-950 flex items-center justify-center border border-white/10 group-hover/link:border-emerald-500 group-hover/link:shadow-[0_0_25px_rgba(16,185,129,0.4)] transition-all duration-500">
+                     <div className="absolute inset-0 rounded-full bg-emerald-500/10 scale-0 group-hover/link:scale-100 transition-transform duration-500"></div>
+                     <span className="text-sm font-mono font-bold text-slate-500 group-hover/link:text-emerald-400 transition-colors">@</span>
                   </div>
-                  <span className="tracking-wide text-lg font-light">asesoria@pepeperez.mx</span>
+                  <span className="tracking-wide text-lg font-light text-slate-400 group-hover/link:text-white group-hover/link:drop-shadow-[0_0_8px_rgba(16,185,129,0.8)] transition-all duration-500">
+                    asesoria@pepeperez.mx
+                  </span>
                 </a>
                 
-                <div className="flex items-center gap-6 group/link relative">
-                   <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center border border-white/10 group-hover/link:border-emerald-500 group-hover/link:bg-emerald-500/20 transition-all z-10">
-                     <span className="text-xs font-bold">Ph</span>
+                <div className="flex items-center gap-6 group/link relative z-10">
+                   <div className="relative w-14 h-14 rounded-full bg-slate-950 flex items-center justify-center border border-white/10 group-hover/link:border-emerald-500 group-hover/link:shadow-[0_0_25px_rgba(16,185,129,0.4)] transition-all duration-500">
+                     <div className="absolute inset-0 rounded-full bg-emerald-500/10 scale-0 group-hover/link:scale-100 transition-transform duration-500"></div>
+                     <span className="text-sm font-mono font-bold text-slate-500 group-hover/link:text-emerald-400 transition-colors">Ph</span>
                   </div>
-                  <span className="tracking-wide text-lg font-light">+52 333 115 5895</span>
+                  <span className="tracking-wide text-lg font-light text-slate-400 group-hover/link:text-white group-hover/link:drop-shadow-[0_0_8px_rgba(16,185,129,0.8)] transition-all duration-500">
+                    +52 333 115 5895
+                  </span>
                 </div>
               </div>
               
