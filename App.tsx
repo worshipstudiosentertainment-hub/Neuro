@@ -308,7 +308,7 @@ const App: React.FC = () => {
 
         <div className="max-w-[1400px] mx-auto px-6 h-full flex items-center justify-between">
           {/* LOGO LOCKUP - Ultra-Premium Typography */}
-          <div className="flex items-center gap-5 group cursor-pointer" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
+          <div className={`flex items-center group cursor-pointer transition-all duration-500 ${isScrolled ? 'gap-3' : 'gap-5'}`} onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
             
             {/* ANIMATED BIO-NODE ICON LOGO - Increased Size */}
             <div className={`relative flex items-center justify-center transition-all duration-500 ${isScrolled ? 'w-10 h-10 scale-90' : 'w-14 h-14 scale-100'}`}>
@@ -354,18 +354,20 @@ const App: React.FC = () => {
                </motion.div>
             </div>
             
-            <div className={`flex flex-col justify-center relative h-auto transition-all duration-500 ${isScrolled ? 'min-w-[120px]' : 'min-w-[180px]'}`}>
-              <div className={`absolute left-0 transition-all duration-500 ${isScrolled ? 'top-1' : '-top-1'}`}>
+            {/* ADJUSTED LOGO TEXT ALIGNMENT */}
+            <div className={`flex flex-col justify-center relative transition-all duration-500 ${isScrolled ? 'h-12 min-w-[120px]' : 'h-14 min-w-[180px]'}`}>
+              <div className={`absolute left-0 transition-all duration-500 ${isScrolled ? '-top-2' : '-top-2'}`}>
                   <span className={`font-heading font-extrabold leading-none tracking-[-0.1em] block transition-all duration-500 text-emerald-600 ${isScrolled ? 'text-3xl' : 'text-5xl'} drop-shadow-sm`}>
                     PEPE
                   </span>
               </div>
-              <div className={`absolute left-0 transition-all duration-500 z-10 ${isScrolled ? 'top-5 left-10' : 'top-6 left-12 md:left-14'}`}>
+              <div className={`absolute left-0 transition-all duration-500 z-10 ${isScrolled ? 'top-2 left-10' : 'top-6 left-12 md:left-14'}`}>
                   <span className={`font-serif-display italic font-medium leading-none text-emerald-600 block transition-all duration-500 ${isScrolled ? 'text-2xl' : 'text-4xl'} drop-shadow-[0_0_20px_rgba(16,185,129,0.4)]`}>
                     Pérez<span className="text-emerald-400 drop-shadow-[0_0_12px_rgba(52,211,153,1)] animate-pulse">.</span>
                   </span>
               </div>
             </div>
+            
             {/* Private Practice Badge */}
             <div className={`hidden lg:block border-l border-slate-300 pl-4 ml-2 transition-opacity duration-300 ${isScrolled ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'}`}>
               <div className="flex flex-col gap-[2px]">
@@ -495,7 +497,7 @@ const App: React.FC = () => {
               initial={{ y: 100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-              className="font-heading font-black text-[13vw] lg:text-[5.5rem] xl:text-[7rem] tracking-[-0.08em] uppercase text-slate-900 mix-blend-darken text-glow-dark"
+              className="font-heading font-black text-[13vw] lg:text-[5.5rem] xl:text-[7rem] tracking-[-0.08em] uppercase text-slate-900 text-glow-dark"
             >
               TRANS
             </motion.span>
@@ -811,7 +813,7 @@ const App: React.FC = () => {
       >
         {/* Dynamic Art Background - The Nano Banana Pro Infusion */}
         <DynamicArt 
-          prompt="Abstract hyper-realistic 8k render of a human brain synapse turning into golden geometric light structures, dark elegant emerald background, macro photography style, cinematic lighting"
+          prompt="Abstract artistic representation of the human brain emotions, neural networks turning into light, deep emerald and gold colors, cinematic lighting, hyper-realistic 8k, biological geometry, synaptic connections"
           className="opacity-40 mix-blend-multiply"
           overlayColor="bg-slate-50/90"
         />
@@ -827,7 +829,7 @@ const App: React.FC = () => {
             </div>
             <h2 className="text-6xl md:text-9xl font-heading font-black text-slate-900 tracking-tighter leading-[0.8] text-glow-dark">
               METODO <br/>
-              <span className="text-transparent text-stroke-heavy hover:text-stroke-emerald transition-colors duration-500 text-glow">LOGÍA</span>
+              <span className="text-emerald-600 text-glow">LOGÍA</span>
             </h2>
           </div>
           <p className="max-w-md text-right text-slate-500 font-light text-lg mt-8 md:mt-0 leading-relaxed bg-white/50 backdrop-blur-sm p-4 rounded-xl border border-white/50">
@@ -890,7 +892,7 @@ const App: React.FC = () => {
                 </span>
                 <h2 className="text-6xl md:text-9xl font-heading font-black mt-4 text-white tracking-tighter leading-[0.85] text-glow-white">
                   EVIDENCIA <br/>
-                  <span className="text-transparent text-stroke-light opacity-30 text-glow">REAL</span>
+                  <span className="text-white text-glow-white">REAL</span>
                 </h2>
              </div>
              <p className="text-slate-400 max-w-sm text-lg font-light leading-relaxed text-right md:text-left">
@@ -967,11 +969,11 @@ const App: React.FC = () => {
           <div>
             <div className="mb-12 relative select-none group cursor-default block">
                {/* REDESIGNED LOGO: SOLID, GLOWING, HIGH CONTRAST */}
-               <h3 className="font-heading text-[6rem] md:text-[9rem] lg:text-[11rem] font-black tracking-[-0.05em] text-white leading-[0.8] drop-shadow-[0_0_25px_rgba(255,255,255,0.4)] text-glow-white">
+               <h3 className="font-heading text-[6rem] md:text-[9rem] lg:text-[11rem] font-black tracking-[-0.05em] text-white leading-[0.8] drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)] text-glow-white">
                  PEPE
                </h3>
-               <h3 className="font-serif-display italic text-[4rem] md:text-[6rem] lg:text-[7rem] text-emerald-500 leading-[0.8] ml-2 md:ml-4 -mt-2 md:-mt-4 drop-shadow-[0_0_30px_rgba(16,185,129,0.8)] text-glow">
-                 Pérez<span className="text-white">.</span>
+               <h3 className="font-serif-display italic text-[4rem] md:text-[6rem] lg:text-[7rem] text-emerald-500 leading-[0.8] ml-2 md:ml-4 -mt-2 md:-mt-4 drop-shadow-lg text-glow">
+                 Pérez<span className="text-white drop-shadow-md">.</span>
                </h3>
             </div>
             

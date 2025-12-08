@@ -75,7 +75,6 @@ const DynamicArt: React.FC<DynamicArtProps> = ({
       }
     } catch (error) {
       console.error("Image generation failed:", error);
-      // If error is related to key, might need to re-prompt, but for now just log
     } finally {
       setLoading(false);
     }
@@ -102,30 +101,27 @@ const DynamicArt: React.FC<DynamicArtProps> = ({
   return (
     <div className={`absolute inset-0 z-0 flex items-center justify-center pointer-events-none overflow-hidden ${className}`}>
       {/* Fallback Ambient Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-teal-500/5"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/10 to-teal-900/10 mix-blend-multiply"></div>
       
       {/* Interactive Trigger */}
-      <div className="pointer-events-auto relative z-10 opacity-0 hover:opacity-100 transition-opacity duration-500 group">
+      <div className="pointer-events-auto relative z-10 opacity-60 hover:opacity-100 transition-opacity duration-500 group">
         <button 
           onClick={handleGenerate}
           disabled={loading}
-          className="bg-slate-900/80 backdrop-blur-md text-white px-6 py-3 rounded-full flex items-center gap-3 text-xs font-bold uppercase tracking-widest shadow-xl border border-emerald-500/30 hover:bg-slate-900 transition-all transform hover:scale-105"
+          className="bg-slate-900/90 backdrop-blur-md text-white px-8 py-4 rounded-full flex items-center gap-3 text-xs font-bold uppercase tracking-widest shadow-[0_0_30px_rgba(16,185,129,0.3)] border border-emerald-500/50 hover:bg-black transition-all transform hover:scale-105"
         >
           {loading ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin text-emerald-400" />
-              Generating Art...
+              Generating Neuro Art...
             </>
           ) : (
             <>
               <ImagePlus className="w-4 h-4 text-emerald-400" />
-              {hasKey ? "Infuse with AI Art" : "Enable AI Graphics"}
+              {hasKey ? "Infuse Section with AI" : "Enable AI Graphics"}
             </>
           )}
         </button>
-        <p className="mt-2 text-[9px] text-center text-slate-400 font-mono">
-          Powered by gemini-3-pro-image-preview
-        </p>
       </div>
     </div>
   );
