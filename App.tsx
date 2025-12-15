@@ -15,21 +15,18 @@ const METHODOLOGY: MethodologyStep[] = [
   { 
     id: '1', 
     title: 'Mirada Compasiva', 
-    subtitle: 'Desafío al Ego',
     iconName: 'Eye',
     description: 'A través de tus historias, desafiamos al EGO y revelamos las verdades invisibles hasta ahora; con empatía y comprensión.'
   },
   { 
     id: '2', 
     title: 'Soberanía Emocional', 
-    subtitle: 'Re-significación',
     iconName: 'Crown',
     description: 'Re significamos el origen del conflicto, desde el único lugar posible: tú mismo. Dejas de ser el resultado de tu pasado para convertirte en el arquitecto de tu futuro.'
   },
   { 
     id: '3', 
     title: 'Integración del Poder', 
-    subtitle: 'Equilibrio Interno',
     iconName: 'Power',
     description: 'Cuando aceptas los recursos que se mantenían en tu “sombra”, te amplificas como individuo y accedes al equilibrío interno que tanto anhelas.'
   },
@@ -805,6 +802,7 @@ const App: React.FC = () => {
           prompt="Abstract artistic representation of the human brain emotions, neural networks turning into light, deep emerald and gold colors, cinematic lighting, hyper-realistic 8k, biological geometry, synaptic connections"
           className="opacity-40 mix-blend-multiply"
           overlayColor="bg-slate-50/90"
+          hideButton={true}
         />
 
         <div className="absolute top-[60%] left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-200 to-transparent hidden md:block z-0 opacity-40"></div>
@@ -850,7 +848,6 @@ const App: React.FC = () => {
               
               <div className="relative z-10">
                 <h3 className="text-2xl md:text-3xl font-heading font-black mb-2 text-slate-900 group-hover:text-emerald-900 transition-colors">{step.title}</h3>
-                <p className="font-serif-display italic text-emerald-600 text-lg mb-4 md:mb-6 group-hover:text-emerald-500 transition-colors">{step.subtitle}</p>
                 <p className="text-base md:text-lg text-slate-600 font-light leading-relaxed">{step.description}</p>
               </div>
 
@@ -894,7 +891,7 @@ const App: React.FC = () => {
              </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {TESTIMONIALS.map((t, i) => (
               <motion.div 
                 key={t.id}
@@ -903,27 +900,27 @@ const App: React.FC = () => {
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ delay: i * 0.1, duration: 0.8, type: "spring", bounce: 0.3 }}
                 whileHover={{ y: -10, scale: 1.01 }}
-                className="relative group rounded-[2.5rem] p-1 bg-gradient-to-br from-white to-white/50 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.05)] hover:shadow-[0_30px_80px_-20px_rgba(16,185,129,0.2)] transition-all duration-500"
+                className="relative group rounded-[2.5rem] p-1 bg-gradient-to-br from-white to-white/50 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.05)] hover:shadow-[0_30px_80px_-20px_rgba(16,185,129,0.2)] transition-all duration-500 h-full"
               >
                 {/* Glowing Border Gradient on Hover */}
                 <div className="absolute inset-0 rounded-[2.5rem] bg-gradient-to-br from-emerald-200/50 via-transparent to-teal-200/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
                 
-                <div className="h-full w-full bg-white/60 backdrop-blur-xl rounded-[2.3rem] p-8 md:p-12 flex flex-col justify-between relative z-10 border border-white/60 group-hover:border-emerald-100/50 transition-colors">
+                <div className="h-full w-full bg-white/60 backdrop-blur-xl rounded-[2.3rem] p-8 md:p-10 flex flex-col justify-between relative z-10 border border-white/60 group-hover:border-emerald-100/50 transition-colors">
                    
                    {/* Header: User Info */}
                    <div className="flex items-start justify-between mb-8">
                       <div className="flex items-center gap-4">
-                         <div className="relative w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border-2 border-white shadow-lg group-hover:scale-105 transition-transform duration-500">
+                         <div className="relative w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border-2 border-white shadow-lg group-hover:scale-105 transition-transform duration-500 flex-shrink-0">
                            {/* Face is visible, giving dopamine */}
                            <img src={t.image} alt={t.name} className="w-full h-full object-cover" />
                          </div>
                          <div>
-                            <h4 className="text-slate-900 font-heading font-bold text-lg md:text-2xl uppercase tracking-wide">{t.name}</h4>
+                            <h4 className="text-slate-900 font-heading font-bold text-lg md:text-xl uppercase tracking-wide leading-tight">{t.name}</h4>
                             <span className="text-emerald-600 text-[10px] md:text-xs font-bold uppercase tracking-widest block mt-1">{t.role}</span>
                          </div>
                       </div>
-                      <div className="w-12 h-12 rounded-full bg-emerald-50 flex items-center justify-center group-hover:bg-emerald-500 transition-colors duration-500">
-                        <Quote className="text-emerald-200 w-6 h-6 rotate-180 group-hover:text-white transition-colors duration-500" />
+                      <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center group-hover:bg-emerald-500 transition-colors duration-500 flex-shrink-0">
+                        <Quote className="text-emerald-200 w-5 h-5 rotate-180 group-hover:text-white transition-colors duration-500" />
                       </div>
                    </div>
 
@@ -942,14 +939,14 @@ const App: React.FC = () => {
                          </div>
                         <span className="text-slate-400 text-[10px] uppercase tracking-widest font-bold">Verificado</span>
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1">
                         {/* Star Rating for Dopamine */}
                         <div className="flex gap-0.5">
                             {[1,2,3,4,5].map(star => (
-                                <Sparkles key={star} className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                                <Sparkles key={star} className="w-2 h-2 text-yellow-400 fill-yellow-400" />
                             ))}
                         </div>
-                        <span className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-4 py-1.5 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-widest shadow-lg shadow-emerald-500/20">
+                        <span className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest shadow-lg shadow-emerald-500/20">
                             {t.impact || "Transformación"}
                         </span>
                       </div>

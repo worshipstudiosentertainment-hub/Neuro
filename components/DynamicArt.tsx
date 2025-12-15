@@ -12,12 +12,14 @@ interface DynamicArtProps {
   prompt: string;
   className?: string;
   overlayColor?: string;
+  hideButton?: boolean;
 }
 
 const DynamicArt: React.FC<DynamicArtProps> = ({ 
   prompt, 
   className = "", 
-  overlayColor = "bg-white/80" 
+  overlayColor = "bg-white/80", 
+  hideButton = false
 }) => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -104,25 +106,27 @@ const DynamicArt: React.FC<DynamicArtProps> = ({
       <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/10 to-teal-900/10 mix-blend-multiply"></div>
       
       {/* Interactive Trigger */}
-      <div className="pointer-events-auto relative z-10 opacity-60 hover:opacity-100 transition-opacity duration-500 group">
-        <button 
-          onClick={handleGenerate}
-          disabled={loading}
-          className="bg-slate-900/90 backdrop-blur-md text-white px-8 py-4 rounded-full flex items-center gap-3 text-xs font-bold uppercase tracking-widest shadow-[0_0_30px_rgba(16,185,129,0.3)] border border-emerald-500/50 hover:bg-black transition-all transform hover:scale-105"
-        >
-          {loading ? (
-            <>
-              <Loader2 className="w-4 h-4 animate-spin text-emerald-400" />
-              Generating Neuro Art...
-            </>
-          ) : (
-            <>
-              <ImagePlus className="w-4 h-4 text-emerald-400" />
-              {hasKey ? "Infuse Section with AI" : "Enable AI Graphics"}
-            </>
-          )}
-        </button>
-      </div>
+      {!hideButton && (
+        <div className="pointer-events-auto relative z-10 opacity-60 hover:opacity-100 transition-opacity duration-500 group">
+          <button 
+            onClick={handleGenerate}
+            disabled={loading}
+            className="bg-slate-900/90 backdrop-blur-md text-white px-8 py-4 rounded-full flex items-center gap-3 text-xs font-bold uppercase tracking-widest shadow-[0_0_30px_rgba(16,185,129,0.3)] border border-emerald-500/50 hover:bg-black transition-all transform hover:scale-105"
+          >
+            {loading ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin text-emerald-400" />
+                Generating Neuro Art...
+              </>
+            ) : (
+              <>
+                <ImagePlus className="w-4 h-4 text-emerald-400" />
+                {hasKey ? "Infuse Section with AI" : "Enable AI Graphics"}
+              </>
+            )}
+          </button>
+        </div>
+      )}
     </div>
   );
 };
