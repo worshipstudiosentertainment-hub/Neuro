@@ -112,63 +112,48 @@ const App: React.FC = () => {
     
     // Initial check
     handleResize();
+    window.addEventListener('resize', handleResize);
     
-    // OPTIMIZED SCROLL HANDLER (RequestAnimationFrame + DOM Caching)
-    let ticking = false;
-    
-    // Cache section elements to avoid repeated DOM queries during scroll
-    const sectionIds = [
-      Section.HERO, 
-      Section.SOBRE_MI, 
-      Section.DECODIFICADOR, 
-      Section.METODOLOGIA, 
-      Section.TESTIMONIOS, 
-      Section.CONTACTO
-    ];
-
-    const cachedElements = new Map<string, HTMLElement | null>();
-    // Pre-fetch elements
-    sectionIds.forEach(id => {
-      cachedElements.set(id, document.getElementById(id));
-    });
-
+    // 1. LIGHTWEIGHT SCROLL LISTENER (UI State only)
+    // Direct state updates allow React to bail out if values haven't changed, 
+    // keeping this very efficient.
     const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const scrollY = window.scrollY;
-          setIsScrolled(scrollY > 20);
-          setShowScrollTop(scrollY > 300);
-
-          // Highly Optimized ScrollSpy
-          const threshold = 180;
-          let current = Section.HERO;
-          
-          for (let i = sectionIds.length - 1; i >= 0; i--) {
-            const id = sectionIds[i];
-            const element = cachedElements.get(id); // Use cache
-            if (element) {
-              const rect = element.getBoundingClientRect();
-              if (rect.top <= threshold) {
-                current = id as Section;
-                break;
-              }
-            }
-          }
-          
-          setActiveSection(current);
-          ticking = false;
-        });
-        
-        ticking = true;
-      }
+        const scrollY = window.scrollY;
+        setIsScrolled(scrollY > 20);
+        setShowScrollTop(scrollY > 300);
     };
 
-    window.addEventListener('resize', handleResize);
     window.addEventListener('scroll', handleScroll, { passive: true });
+
+    // 2. INTERSECTION OBSERVER (ScrollSpy)
+    // Moves geometry calculations off the main thread scroll loop for smooth FPS
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    // Trigger when 50% of the viewport is crossed or element is prominently visible
+    const observerOptions = {
+        root: null,
+        rootMargin: '-20% 0px -50% 0px', 
+        threshold: 0
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    
+    // Observe all sections
+    Object.values(Section).forEach(id => {
+        const el = document.getElementById(id);
+        if (el) observer.observe(el);
+    });
     
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('scroll', handleScroll);
+      observer.disconnect();
     };
   }, []);
 
@@ -415,49 +400,6 @@ const App: React.FC = () => {
           </button>
         </div>
       </nav>
-
-      {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[90] bg-slate-950 flex flex-col items-center justify-center gap-8 md:hidden overflow-hidden"
-          >
-             <div className="absolute inset-0 bg-gradient-to-b from-emerald-900/10 to-slate-950 pointer-events-none"></div>
-
-            <div className="flex flex-col items-center gap-8 relative z-10">
-              {[
-                { label: 'Sobre Mí', id: Section.SOBRE_MI },
-                { label: 'Metodología', id: Section.METODOLOGIA },
-                { label: 'Espejo', id: Section.DECODIFICADOR },
-                { label: 'Contacto', id: Section.CONTACTO },
-              ].map((item, i) => (
-                <motion.button
-                  key={item.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1, duration: 0.4 }}
-                  onClick={() => scrollToSection(item.id)}
-                  className="text-4xl font-heading font-black text-white hover:text-emerald-500 transition-colors tracking-tighter uppercase text-stroke-light hover:text-stroke-emerald"
-                >
-                  {item.label}
-                </motion.button>
-              ))}
-            </div>
-            
-            <button 
-              onClick={() => setMobileMenuOpen(false)}
-              className="absolute bottom-12 p-4 text-slate-500 hover:text-white transition-colors"
-              aria-label="Cerrar menú"
-            >
-              <X className="w-8 h-8" />
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* HERO SECTION */}
       <header id={Section.HERO} className="relative min-h-screen flex flex-col lg:flex-row scroll-mt-0 overflow-hidden bg-slate-50">
