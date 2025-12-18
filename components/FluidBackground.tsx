@@ -1,3 +1,4 @@
+
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
@@ -13,7 +14,7 @@ const NeuralNodes = () => {
       size: Math.random() * 8 + 3,
       x: Math.random() * 100,
       y: Math.random() * 100,
-      duration: Math.random() * 3 + 4, // Faster duration
+      duration: Math.random() * 3 + 4,
       delay: Math.random() * 2,
     }));
   }, []);
@@ -23,7 +24,7 @@ const NeuralNodes = () => {
       {nodes.map((node) => (
         <motion.div
           key={node.id}
-          className="absolute rounded-full bg-emerald-500/10 blur-[2px] will-change-transform"
+          className="absolute rounded-full bg-cyan-500/10 blur-[2px] will-change-transform"
           style={{
             left: `${node.x}%`,
             top: `${node.y}%`,
@@ -50,40 +51,17 @@ const NeuralNodes = () => {
 const FluidBackground: React.FC = () => {
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden bg-slate-50">
-      
       <NeuralNodes />
-
-      {/* Blob 1: Vibrant Emerald - Living Breath */}
       <motion.div
-        className="absolute top-[-20%] right-[-10%] w-[90vw] h-[90vw] bg-emerald-400/20 rounded-full mix-blend-multiply filter blur-[90px] opacity-70 will-change-transform"
-        animate={{
-          scale: [1, 1.15, 0.95, 1],
-          x: [0, 60, -20, 0],
-          y: [0, 30, -30, 0],
-        }}
-        transition={{
-          duration: 18, // Faster cycle
-          repeat: Infinity,
-          ease: "linear"
-        }}
+        className="absolute top-[-20%] right-[-10%] w-[90vw] h-[90vw] bg-cyan-400/20 rounded-full mix-blend-multiply filter blur-[90px] opacity-70 will-change-transform"
+        animate={{ scale: [1, 1.15, 0.95, 1], x: [0, 60, -20, 0], y: [0, 30, -30, 0] }}
+        transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
       />
-
-      {/* Blob 2: Deep Teal/Cyan - Consciousness */}
       <motion.div
-        className="absolute bottom-[-10%] left-[-20%] w-[100vw] h-[100vw] bg-teal-500/15 rounded-full mix-blend-multiply filter blur-[90px] opacity-60 will-change-transform"
-        animate={{
-          scale: [1.1, 0.9, 1.1],
-          y: [0, -60, 0],
-          x: [0, -30, 30, 0],
-        }}
-        transition={{
-          duration: 22,
-          repeat: Infinity,
-          ease: "linear"
-        }}
+        className="absolute bottom-[-10%] left-[-20%] w-[100vw] h-[100vw] bg-cyan-500/15 rounded-full mix-blend-multiply filter blur-[90px] opacity-60 will-change-transform"
+        animate={{ scale: [1.1, 0.9, 1.1], y: [0, -60, 0], x: [0, -30, 30, 0] }}
+        transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
       />
-
-      {/* Subtle Grain for Texture */}
       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none mix-blend-overlay"></div>
     </div>
   );

@@ -1,3 +1,4 @@
+
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
@@ -5,17 +6,16 @@
 
 import { GoogleGenAI, Chat, GenerateContentResponse } from "@google/genai";
 
-const API_KEY = process.env.API_KEY || '';
-
 let chatSession: Chat | null = null;
 
 export const initializeChat = (): Chat => {
   if (chatSession) return chatSession;
 
-  const ai = new GoogleGenAI({ apiKey: API_KEY });
+  // Initialize with the recommended gemini-3-flash-preview model and use process.env.API_KEY directly
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   
   chatSession = ai.chats.create({
-    model: 'gemini-2.5-flash',
+    model: 'gemini-3-flash-preview',
     config: {
       systemInstruction: `
       ROL: Eres "Neural-Assistant", el concierge de inteligencia artificial de Pepe Pérez, experto en Bioneuroemoción® y Neuromarketing.
@@ -45,7 +45,7 @@ export const initializeChat = (): Chat => {
 };
 
 export async function* sendMessageToGeminiStream(message: string): AsyncGenerator<string, void, unknown> {
-  if (!API_KEY) {
+  if (!process.env.API_KEY) {
     yield "Conexión segura establecida... (Modo Demo)";
     yield "El asistente requiere una API Key válida para iniciar el protocolo de acompañamiento.";
     return;

@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pepe Pérez | Bioneuroemoción®</title>
+    <title>Pepe Pérez | Conectar HumanaMente</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,7 +25,7 @@
         background-color: #f8fafc;
         color: #020617;
         overflow-x: hidden;
-        cursor: auto; /* Enforce default cursor for performance */
+        cursor: auto;
       }
       
       h1, h2, h3, h4, .font-heading {
@@ -35,13 +36,17 @@
         font-family: 'Playfair Display', serif;
       }
       
+      /* --- BRAND COLOR: CYAN #00D1C1 --- */
+      .text-brand { color: #00D1C1; }
+      .bg-brand { background-color: #00D1C1; }
+      .border-brand { border-color: #00D1C1; }
+
       /* --- ULTRA TYPOGRAPHY EFFECTS --- */
-      .text-outline {
-        -webkit-text-stroke: 1px rgba(15, 23, 42, 0.2);
+      .text-outline-brand {
+        -webkit-text-stroke: 1.5px #00D1C1;
         color: transparent;
       }
 
-      /* ULTRA HERO HEADLINE STYLE */
       .text-stroke-heavy {
         -webkit-text-stroke: 1.5px #0f172a;
         color: transparent;
@@ -50,9 +55,9 @@
       }
       
       .text-stroke-heavy:hover {
-        -webkit-text-stroke: 1.5px rgba(16, 185, 129, 0.8);
+        -webkit-text-stroke: 1.5px rgba(0, 209, 193, 0.8);
         color: transparent;
-        text-shadow: 0 0 60px rgba(16, 185, 129, 0.4), 0 0 20px rgba(16, 185, 129, 0.2);
+        text-shadow: 0 0 60px rgba(0, 209, 193, 0.4), 0 0 20px rgba(0, 209, 193, 0.2);
         transform: scale(1.01);
       }
 
@@ -61,18 +66,18 @@
         color: transparent;
       }
 
-      .text-stroke-emerald {
-        -webkit-text-stroke: 1px rgba(16, 185, 129, 0.5);
+      .text-stroke-brand {
+        -webkit-text-stroke: 1px rgba(0, 209, 193, 0.5);
         color: transparent;
       }
       
       /* --- GLOW & LIGHTING --- */
-      .glow-emerald {
-         box-shadow: 0 0 40px -10px rgba(16, 185, 129, 0.6);
+      .glow-brand {
+         box-shadow: 0 0 40px -10px rgba(0, 209, 193, 0.6);
       }
       
       .text-glow {
-        text-shadow: 0 0 20px rgba(16, 185, 129, 0.8), 0 0 10px rgba(16, 185, 129, 0.5);
+        text-shadow: 0 0 20px rgba(0, 209, 193, 0.8), 0 0 10px rgba(0, 209, 193, 0.5);
       }
       
       .text-glow-white {
@@ -83,10 +88,6 @@
         text-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
       }
       
-      .glow-text {
-        text-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
-      }
-
       .ultra-glass {
         background: rgba(255, 255, 255, 0.03);
         backdrop-filter: blur(20px);
@@ -94,17 +95,12 @@
         border: 1px solid rgba(255, 255, 255, 0.1);
       }
       
-      /* Mobile Breathing Animation */
       @keyframes pulse-slow {
         0%, 100% { opacity: 0.4; transform: scale(1); }
         50% { opacity: 0.7; transform: scale(1.1); }
       }
       .animate-pulse-slow {
         animation: pulse-slow 8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-      }
-
-      .clip-path-slant {
-        clip-path: polygon(10% 0, 100% 0, 100% 100%, 0% 100%);
       }
     </style>
   <script type="importmap">
