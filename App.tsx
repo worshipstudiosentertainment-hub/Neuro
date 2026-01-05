@@ -14,16 +14,24 @@ import { Section, MethodologyStep } from './types';
 const BRAND_COLOR = "#00D1C1";
 const BRAND_TEAL = "#00A99D";
 
-// Optimized Logo Component with maximum presence and controlled spacing
-// Mobile: h-16 (64px) for high visibility without breaking nav
-// Desktop: h-56 (224px) for massive impact
-const Logo: React.FC<{ light?: boolean; className?: string }> = ({ light = false, className = "h-16 md:h-56" }) => (
-  <div className="flex items-center justify-center select-none py-2 px-1 relative z-50">
+// Optimized Logo Component 
+// CRITICAL: Uses object-contain and max dimensions to ensure the logo is NEVER cut.
+// It acts as the primary element in the header.
+const Logo: React.FC<{ light?: boolean; className?: string }> = ({ light = false, className = "" }) => (
+  <div className={`relative flex items-center justify-center ${className}`}>
     <img 
-      src="https://i.ibb.co/xqbyS2xC/full-trimmed-transparent-customcolor-8.png" 
+      src="https://i.ibb.co/8nCp0vcq/full-trimmed-transparent-customcolor.png" 
       alt="Pepe Pérez Logo" 
-      className={`${className} w-auto object-contain transition-all duration-700 ease-out ${light ? 'brightness-0 invert opacity-100' : 'drop-shadow-[0_10px_20px_rgba(0,209,193,0.2)]'}`} 
-      style={{ filter: light ? 'none' : 'contrast(1.05)' }}
+      className="w-full h-full object-contain block"
+      style={{ 
+        // Enhanced shadow for better "pop" as requested previously
+        filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.1)) drop-shadow(0 10px 15px rgba(0,0,0,0.2))',
+        // OPTIMIZATION: Ensure maximum clarity and sharpness
+        imageRendering: '-webkit-optimize-contrast', 
+        transform: 'translateZ(0)',
+        willChange: 'transform',
+        backfaceVisibility: 'hidden'
+      }}
     />
   </div>
 );
@@ -257,73 +265,63 @@ const App: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* PERMANENT CENTERED LOGO NAV */}
+      {/* PLASMORPHIC NAV BAR - UPDATED DESIGN & LOGO SIZE FIX */}
       <nav 
-        className="fixed top-0 left-0 right-0 z-[100] bg-white/70 backdrop-blur-[24px] border-b border-white/20 h-24 md:h-64 flex items-center shadow-lg transition-all duration-500 w-full"
+        className="fixed top-0 left-0 right-0 z-[100] h-24 md:h-64 flex items-center transition-all duration-500 w-full overflow-hidden"
       >
+        {/* PLASMORPHIC EFFECT LAYER - ULTRA GLASSMORPHIC */}
+        <div className="absolute inset-0 z-0 overflow-hidden shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] border-b border-white/5">
+           {/* Deep Dark Teal Glass Base - MORE TRANSPARENT & HIGHER BLUR */}
+           <div className="absolute inset-0 bg-[#001210]/60 backdrop-blur-[40px] backdrop-saturate-150"></div>
+           
+           {/* CORNER GLOWS ONLY - Softer and more integrated */}
+           <div className="absolute top-0 left-0 w-[50%] h-full bg-[radial-gradient(ellipse_at_top_left,_rgba(0,209,193,0.15),_transparent_70%)] animate-pulse-slow"></div>
+           <div className="absolute top-0 right-0 w-[50%] h-full bg-[radial-gradient(ellipse_at_top_right,_rgba(0,209,193,0.15),_transparent_70%)] animate-pulse-slow" style={{ animationDelay: '2s' }}></div>
+           
+           {/* Iridescent Sheen / Noise */}
+           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.04] mix-blend-overlay"></div>
+           
+           {/* Inner Glow Border - Simulating glass edge light */}
+           <div className="absolute inset-0 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.15),_inset_0_-1px_0_0_rgba(255,255,255,0.05)]"></div>
+           
+           {/* Bottom Light Beam */}
+           <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#00D1C1]/30 to-transparent"></div>
+        </div>
+
+        {/* Progress Line */}
         <motion.div 
-          className="absolute bottom-0 left-0 right-0 h-[4px] md:h-[6px] bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-400 origin-left z-50"
+          className="absolute bottom-0 left-0 right-0 h-[2px] md:h-[3px] bg-gradient-to-r from-[#00D1C1] via-white to-[#00D1C1] origin-left z-50 shadow-[0_0_20px_#00D1C1]"
           style={{ scaleX }}
         />
 
-        <div className="max-w-[1800px] mx-auto px-4 md:px-12 h-full flex items-center w-full relative">
+        <div className="max-w-[1800px] mx-auto px-4 md:px-12 h-full flex items-center justify-between w-full relative z-20">
           
-          {/* Desktop Links - Absolutely Positioned Left */}
-          <div className="hidden xl:flex items-center gap-12 2xl:gap-16 text-[13px] font-black tracking-[0.4em] text-slate-900 uppercase absolute left-12 top-1/2 -translate-y-1/2">
-            {[
-              { label: 'Sobre Mí', id: Section.SOBRE_MI },
-              { label: 'Metodología', id: Section.METODOLOGIA },
-              { label: 'Espejo', id: Section.DECODIFICADOR },
-              { label: 'Testimonios', id: Section.TESTIMONIOS },
-            ].map((item) => {
-              const isActive = activeSection === item.id;
-              return (
-                <button 
-                  key={item.label} 
-                  onClick={() => scrollToSection(item.id)}
-                  className="relative py-4 group"
-                >
-                  <span className={`relative z-10 transition-colors duration-500 ${isActive ? 'text-cyan-700' : 'group-hover:text-cyan-700'}`}>
-                    {item.label}
-                  </span>
-                  <span className={`absolute bottom-0 left-0 w-full h-[4px] bg-[#00D1C1] transition-transform duration-700 origin-left ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}></span>
-                </button>
-              );
-            })}
-          </div>
+          {/* Spacer to balance the menu icon on the right, keeping logo centered visually */}
+          <div className="w-12 md:w-16 hidden md:block"></div>
 
-          {/* LOGO - CENTERED (Mobile flex, Desktop absolute) */}
+          {/* LOGO - CENTERED AND UNCUT - OPTIMIZED CLARITY */}
           <div 
-            className="flex-grow flex justify-center items-center h-full relative z-20 xl:absolute xl:left-1/2 xl:top-1/2 xl:-translate-x-1/2 xl:-translate-y-1/2"
+             className="group cursor-pointer relative flex items-center justify-center h-full py-1 flex-grow"
+             onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}
           >
-             <div 
-              className="group cursor-pointer transition-transform duration-700 hover:scale-105"
-              onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}
-             >
-               <Logo className="h-16 md:h-56" />
-             </div>
-          </div>
-          
-          {/* Desktop CTA - Absolutely Positioned Right */}
-          <div className="hidden xl:flex items-center absolute right-12 top-1/2 -translate-y-1/2">
-            <motion.button 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => scrollToSection(Section.CONTACTO)}
-              className="bg-slate-900 text-white rounded-full font-black tracking-[0.2em] hover:bg-[#00D1C1] shadow-lg transition-all duration-700 px-10 py-5 text-xs"
-            >
-              AGENDAR CITA
-            </motion.button>
+               <Logo light={true} className="h-[85%] md:h-[90%] w-auto relative z-10" />
           </div>
 
-          {/* Mobile Toggle - Absolute Right on Mobile */}
+          {/* UPGRADED MENU ICON - GLASS BUTTON WITH ANIMATED LINES */}
           <button 
-            className="xl:hidden text-slate-900 z-50 p-3 hover:bg-slate-100/40 rounded-full transition-all absolute right-4 top-1/2 -translate-y-1/2"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Menú"
+            onClick={() => setMobileMenuOpen(true)}
+            className="group relative w-12 h-12 md:w-16 md:h-16 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 backdrop-blur-md flex flex-col items-center justify-center gap-1.5 transition-all duration-300 hover:scale-110 hover:border-[#00D1C1]/50 shadow-[0_0_20px_rgba(0,0,0,0.2)] hover:shadow-[0_0_30px_rgba(0,209,193,0.3)] z-30 overflow-hidden"
+            aria-label="Abrir menú"
           >
-             {mobileMenuOpen ? <X size={32} /> : <Menu size={32} />}
+            {/* Inner Glow on Hover */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-[#00D1C1]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            
+            {/* Animated Hamburger Lines */}
+            <span className="w-5 md:w-8 h-[2px] bg-white rounded-full transition-all duration-300 group-hover:w-4 md:group-hover:w-6 group-hover:bg-[#00D1C1] group-hover:translate-x-1"></span>
+            <span className="w-5 md:w-8 h-[2px] bg-white rounded-full transition-all duration-300 group-hover:bg-[#00D1C1]"></span>
+            <span className="w-5 md:w-8 h-[2px] bg-white rounded-full transition-all duration-300 group-hover:w-4 md:group-hover:w-6 group-hover:bg-[#00D1C1] group-hover:-translate-x-1"></span>
           </button>
+
         </div>
       </nav>
 
@@ -730,7 +728,7 @@ const App: React.FC = () => {
         </div>
       </footer>
 
-      {/* MOBILE NAV OVERLAY - REDESIGNED FOR SPACING */}
+      {/* MOBILE NAV OVERLAY - REDESIGNED FOR DARK THEME - UPDATED BACKGROUND */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
@@ -738,11 +736,11 @@ const App: React.FC = () => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed inset-0 z-[120] bg-white flex flex-col p-6 md:p-10 lg:hidden overflow-y-auto"
+            className="fixed inset-0 z-[120] bg-[#001E1C] flex flex-col p-6 md:p-10 lg:hidden overflow-y-auto"
           >
-            <div className="flex justify-between items-center mb-12 md:mb-24">
-               <Logo className="h-16 md:h-24" />
-               <button onClick={() => setMobileMenuOpen(false)} className="p-4 md:p-6 bg-slate-100 rounded-full hover:bg-slate-200 transition-colors"><X size={32} className="md:w-12 md:h-12" /></button>
+            <div className="flex justify-between items-center mb-12 md:mb-24 border-b border-white/10 pb-6">
+               <Logo light className="h-16 md:h-24" />
+               <button onClick={() => setMobileMenuOpen(false)} className="p-4 md:p-6 bg-white/5 rounded-full hover:bg-white/10 transition-colors"><X size={32} className="text-white md:w-12 md:h-12" /></button>
             </div>
             <div className="flex flex-col gap-8 md:gap-12">
               {[
@@ -758,7 +756,7 @@ const App: React.FC = () => {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.1 }}
                   onClick={() => scrollToSection(item.id)}
-                  className="text-4xl md:text-5xl font-heading font-black text-slate-900 text-left tracking-tighter uppercase leading-none"
+                  className="text-4xl md:text-5xl font-heading font-black text-slate-200 hover:text-[#00D1C1] transition-colors text-left tracking-tighter uppercase leading-none"
                 >
                   {item.label}
                 </motion.button>
@@ -767,7 +765,7 @@ const App: React.FC = () => {
             <div className="mt-auto pt-12 md:pt-24 pb-8">
                <button 
                   onClick={() => window.open('https://wa.me/523331155895', '_blank')}
-                  className="w-full bg-slate-900 text-white py-8 md:py-10 rounded-[2rem] font-black uppercase tracking-[0.3em] text-lg md:text-xl shadow-2xl"
+                  className="w-full bg-[#00D1C1] text-white py-8 md:py-10 rounded-[2rem] font-black uppercase tracking-[0.3em] text-lg md:text-xl shadow-2xl hover:bg-cyan-600 transition-colors"
                >
                  SOLICITAR SESIÓN
                </button>
