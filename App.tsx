@@ -338,8 +338,8 @@ const App: React.FC = () => {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-full w-full bg-[#00D1C1] shadow-lg"></span>
             </div>
-            <span className="text-cyan-800 font-mono text-[10px] md:text-xs uppercase tracking-[0.4em] font-black border-b-2 border-cyan-500/30 pb-2">
-              Acompañamiento Emocional
+            <span className="text-black font-mono text-[10px] md:text-xs uppercase tracking-[0.4em] font-black border-b-2 border-cyan-500/30 pb-2">
+              Acompañamiento de Alto Nivel
             </span>
           </motion.div>
 
