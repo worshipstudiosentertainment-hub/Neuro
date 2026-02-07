@@ -10,10 +10,19 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Space+Grotesk:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
+      :root {
+        /* Physics Mapping for Interaction Layer */
+        --spring-easing: cubic-bezier(0.33, 1, 0.68, 1);
+        --snappy-easing: cubic-bezier(0.16, 1, 0.3, 1);
+        --response-ms: 220ms;
+      }
+
       html {
         scroll-behavior: smooth;
         -ms-overflow-style: none;
         scrollbar-width: none;
+        /* Prevent elastic scroll bleed into layout */
+        overscroll-behavior-y: none;
       }
       
       ::-webkit-scrollbar {
@@ -26,6 +35,10 @@
         color: #020617;
         overflow-x: hidden;
         cursor: auto;
+        /* Zero-Latency Protocol */
+        touch-action: manipulation;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
       
       h1, h2, h3, h4, .font-heading {
@@ -34,6 +47,19 @@
 
       .font-serif-display {
         font-family: 'Playfair Display', serif;
+      }
+      
+      /* Optimized Performance Interaction Layer */
+      button, a {
+        transition: transform var(--response-ms) var(--spring-easing), 
+                    background-color var(--response-ms) var(--spring-easing),
+                    opacity var(--response-ms) var(--spring-easing);
+        will-change: transform;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      button:active, a:active {
+        transform: scale(0.97) translateZ(0);
       }
       
       /* --- BRAND COLOR: CYAN #00D1C1 --- */
