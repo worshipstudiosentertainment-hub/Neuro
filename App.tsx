@@ -242,10 +242,10 @@ const App: React.FC = () => {
         aria-label="Contactar por WhatsApp"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
-        className="fixed bottom-6 right-6 md:bottom-12 md:right-12 z-[70] bg-[#25D366] text-white p-4 md:p-6 rounded-full shadow-[0_15px_40px_rgba(37,211,102,0.4)] flex items-center justify-center group"
+        className="fixed bottom-24 right-6 md:bottom-32 md:right-12 z-[70] bg-[#25D366] text-white p-3 md:p-4 rounded-full shadow-[0_15px_40px_rgba(37,211,102,0.4)] flex items-center justify-center group"
       >
         <div className="absolute inset-0 rounded-full border border-[#25D366] animate-ping opacity-30"></div>
-        <MessageCircle className="w-8 h-8 md:w-10 md:h-10 fill-current relative z-10" />
+        <MessageCircle className="w-6 h-6 md:w-8 md:h-8 fill-current relative z-10" />
       </motion.a>
 
       {/* BACK TO TOP */}
